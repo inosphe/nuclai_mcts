@@ -1,0 +1,200 @@
+%section#gateproblem
+
+  %div
+
+    %svg{ :viewbox => "0 0 1601 898", style: "width: 1920px; height: 1020px;" }
+
+      /, style: "position: absolute; top: 350px; left: 100px;" }
+      / :viewbox => "0 0 620 310",
+
+      %image{height: "898", transform: "matrix(1 0 0 1 0 0)", width: "1601", "xlink:href" => "res/gates.png"}
+
+      %g.fragment.fade-out{ "data-fragment-index" => 4 }
+
+        %g{ transform: "translate(20,20)" }
+          %rect{ width:864, height:58, fill:"white", opacity:"0.8" }
+          %text{:fill => "black", "font-size" => 42 }
+            %tspan{ x: 12, y:42 }
+              The curious incident of the poltergeist gates ...
+
+        %g.fragment{ transform: "translate(850,450)", "data-fragment-index" => 2 }
+          %rect{ width:340, height:58, fill:"white", opacity:"0.8" }
+          %text{:fill => "black", "font-size" => 42 }
+            %tspan{ x: 12, y:42 }
+              Last creature left
+
+        %g.fragment{ transform: "translate(350,250)", "data-fragment-index" => 3 }
+          %rect{ width:680, height:58, fill:"white", opacity:"0.8" }
+          %text{:fill => "black", "font-size" => 42 }
+            %tspan{ x: 12, y:42 }
+              We can only wait or toggle the gates
+
+      %g.fragment.current-visible{ transform: "translate(645,420)", "data-fragment-index" => 4 }
+        %rect{ width:310, height:58, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42 }
+          %tspan{ x: 12, y:42 }
+            What happens?
+
+      %g.fragment.current-visible{ transform: "translate(380,420)", "data-fragment-index" => 5 }
+        %rect{ width:820, height:106, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:410, y:42 }
+            The villain randomly opens and closes gates
+          %tspan{ x:410, y:92 }
+            funny but doesn't look good
+
+      %g.fragment.current-visible{ transform: "translate(720,150)", "data-fragment-index" => 6 }
+        %rect{ width:820, height:106, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:410, y:42 }
+            Distribution of position in the ranking table
+          %tspan{ x:410, y:92 }
+            over multiple runs (from same snapshot)
+
+      %g.fragment.current-visible{ transform: "translate(1100,550)", "data-fragment-index" => 7 }
+        %rect{ width:320, height:58, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:160, y:42 }
+            This gate is bad!
+
+      %g.fragment.current-visible{ transform: "translate(900,150)", "data-fragment-index" => 8 }
+        %rect{ width:650, height:106, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:325, y:42 }
+            But everything is equivalent ...
+          %tspan{ x:325, y:92 }
+            So anything will do
+
+      %g.fragment.current-visible{ transform: "translate(1020,350)", "data-fragment-index" => 9 }
+        %rect{ width:550, height:58, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:275, y:42 }
+            Quantise scores into "bands"
+
+      %g.fragment{ transform: "translate(20,20)", "data-fragment-index" => 9 }
+        %rect{ width:410, height:58, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42 }
+          %tspan{ x: 12, y:42 }
+            Priority Quantisation
+
+      %g.fragment{ transform: "translate(1050,500)", "data-fragment-index" => 10 }
+        %rect{ width:520, height:106, fill:"white", opacity:"0.8" }
+        %text{:fill => "black", "font-size" => 42, "text-align" => "center", "text-anchor" => "middle" }
+          %tspan{ x:250, y:42 }
+            Select the highest priority
+          %tspan{ x:250, y:92 }
+            action from the top band
+
+      %g.fragment{ transform: "translate(50,350) scale(1.5)", "data-fragment-index" => 6 }
+        %g
+          %rect{ width:"620", height:"310", fill:"white", opacity:"0.8" }
+
+        %g#highlight{:name => "highlight"}
+
+          %path.fragment#highlight{:d => "M0,0 L600,0 L600,40 L0,40 L0,0 Z ", :fill => "#21BDEE", :height => "40", :opacity => "0.54", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "0.99", :transform => "matrix(1 0 0 1 9.99 240)", :width => "600", "data-fragment-index" => 7 }
+          %path.bands.fragment{:d => "M0,0 L600,0 L600,165.0 L0,165.0 L0,0 Z ", :fill => "#CA1818", :height => "165.0", :opacity => "0.54", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "0.99", :transform => "matrix(1 0 0 1 9.99 35.0)", :width => "600", "data-fragment-index" => 9, "fill-opacity" => "0.25" }
+          %path.bands.fragment{:d => "M0,0 L600,0 L600,40 L0,40 L0,0 Z ", :fill => "#D5EE21", :height => "40", :opacity => "0.54", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "0.99", :transform => "matrix(1 0 0 1 9.99 200.0)", :width => "600", "data-fragment-index" => 9, "fill-opacity" => "0.25" }
+          %path#selected.fragment{:d => "M0,0 L600,0 L600,40 L0,40 L0,0 Z ", :fill => "#FD0202", :height => "40", :opacity => "0.54", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "0.99", :transform => "matrix(1 0 0 1 9.99 120)", :width => "600", "data-fragment-index" => 10 }
+
+        %g#table{:name => "table"}
+          %path{:d => "M0,0 L600.0,0 ", :fill => "#000000", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 9.99 80)", :width => "600.0"}
+          %path{:d => "M0,0 L0,245 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611664", :transform => "matrix(1 0 0 1 334.99 34.99)"}
+          %path{:d => "M0,0 L600.0,0 ", :fill => "#000000", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 9.99 160.0)", :width => "600.0"}
+          %path{:d => "M0,0 L0,245 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611664", :transform => "matrix(1 0 0 1 384.99 34.99)"}
+          %path{:d => "M0,0 L0,245 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611664", :transform => "matrix(1 0 0 1 434.99 34.99)"}
+          %path{:d => "M0,0 L600.0,0 ", :fill => "#000000", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 9.99 120)", :width => "600.0"}
+          %path{:d => "M0,0 L0,244.99 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611665", :transform => "matrix(1 0 0 1 485 34.99)"}
+          %path{:d => "M0,0 L600.0,0 ", :fill => "#000000", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 9.99 239.99)", :width => "600.0"}
+          %path{:d => "M0,0 L0,245 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611664", :transform => "matrix(1 0 0 1 534.99 34.99)"}
+          %path{:d => "M0,0 L600.0,0 ", :fill => "#000000", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 9.99 200)", :width => "600.0"}
+          %path{:d => "M0,0 L0,245 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611664", :transform => "matrix(1 0 0 1 584.99 34.99)"}
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 324.99 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 1
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 374.99 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 2
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 425 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 3
+          %path{:d => "M0,0 L300.0,0 L300.0,245 L0,245 L0,0 Z ", :fill => "none", :height => "245.0", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2.3478713763747794", :transform => "matrix(1 0 0 1 310.0 34.99)", :width => "300.0"}
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 475 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 4
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 525.0 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 5
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 575.0 9.99)", :type => "textBox", :width => "20.0"}
+            %tspan{:x => "10.0", :y => "18"} 6
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 44.99)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Gate 1
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(0.99 0 0 1 24.99 9.99)", :type => "textBox", :width => "80.50431034482756"}
+            %tspan{:x => "0", :y => "18"} Action
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.99 9.99)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.5000000000001", :y => "18"} Score
+          %path{:d => "M0,0 L0,244.99 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611662", :transform => "matrix(1 0 0 1 235 35.0)"}
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235 9.99)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.5000000000001", :y => "18"} Error
+          %path{:d => "M0,0 L0,244.99 ", :fill => "#000000", :height => "245", :stroke => "#AAAAAA", "stroke-miterlimit" => "3", "stroke-width" => "0.9899494936611662", :transform => "matrix(1 0 0 1 159.99 35.0)"}
+          %text#notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 85)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Gate 4
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 125)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Wait
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 164.99)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Gate 2
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 204.99)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Gate 5
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 24.99 245.2586206896553)", :type => "textBox", :width => "146.55172413793105"}
+            %tspan{:x => "0", :y => "22"} Gate 3
+          %path{:d => "M0,0 L300.0,0 L300.0,244.99 L0,244.99 L0,0 Z ", :fill => "none", :height => "245", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2.347871376374779", :transform => "matrix(1 0 0 1 9.99 35.0)", :width => "300.0"}
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 47.49999999999973)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.5
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 87.49999999999997)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.49
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 127.5)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.49
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 167.60775862068954)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.48
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 207.49999999999991)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.39
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 159.49137931034434 247.75862068965523)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.02
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235.0 47.49999999999973)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.03
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235.0 87.49999999999997)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.03
+          %text{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235.0 127.5)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.02
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 0.99 235.0 167.6077586206896)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.01
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235.0 207.49999999999991)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.04
+          %text.notwait{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "2", "text-align" => "center", "text-anchor" => "middle", :transform => "matrix(0.99 0 0 1 235.0 247.75862068965523)", :type => "textBox", :width => "75.0"}
+            %tspan{:x => "37.50000000000008", :y => "18"} 0.01
+        %g#boxwhisker{:name => "boxwhisker"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 335.0 42.5)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 535.0 42.5)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 335.02156500308143 85.0)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 535.0 85.0)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 335 125)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 485 125)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 385 165.0)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 535.0 165.0)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 585 245.0)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 385 205)"}
+          %path{:d => "M0,0 L0,30 ", :fill => "#FFFFFF", :height => "30", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 535.0 205)"}
+          %text#runs{:fill => "#000000", "font-family" => "Arial", "font-size" => "18", :height => "20", :stroke => "none", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", "text-align" => "right", "text-anchor" => "end", :transform => "matrix(1 0 0 1 510.0 285)", :type => "textBox", :width => "100"}
+            %tspan{:x => "100", :y => "18"} Runs: 20
+          %path{:d => "M0,0 L200.0,0 ", :fill => "#FFFFFF", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 335.0 57.5)", :width => "200.0"}
+          %path{:d => "M0,0 L200.0,0 ", :fill => "#FFFFFF", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 335.0 100)", :width => "200.0"}
+          %path{:d => "M0,0 L147.78325123152683,0.4926108374386331 ", :fill => "#FFFFFF", :height => "0.4926108374386331", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.4034322695830195", :transform => "matrix(1 0 0 1 336.4802856445313 140)", :width => "147.78325123152706"}
+          %path{:d => "M0,0 L150.0,0.49261083743843415 ", :fill => "#FFFFFF", :height => "0.49261083743843415", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.47722557505166", :transform => "matrix(1 0 0 1 385.0 180)", :width => "150.0"}
+          %path{:d => "M0,0 L150.0,0 ", :fill => "#FFFFFF", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "5.4034322695830195", :transform => "matrix(1 0 0 1 385.0 220)", :width => "150.0"}
+          %path{:d => "M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ", :fill => "#22D345", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 385.0 90.0)", :width => "49.99"}
+          %path{:d => "M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ", :fill => "#FF7418", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 435.0 90.0)", :width => "49.99"}
+          %path{:d => "M0,0 L99.99,0 L99.99,20 L0,20 L0,0 Z ", :fill => "#22D345", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 335.0 47.50000000000002)", :width => "100"}
+          %path{:d => "M0,0 L50,0 L50,20 L0,20 L0,0 Z ", :fill => "#FF7418", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 435.0 47.50000000000002)", :width => "50.0"}
+          %path{:d => "M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ", :fill => "#22D345", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 385.0 130)", :width => "49.99"}
+          %path{:d => "M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ", :fill => "#FF7418", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 434.99 130)", :width => "49.99"}
+          %path{:d => "M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ", :fill => "#FF7418", :height => "20", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 434.75369458128216 171.28078817733947)", :width => "49.99"}
+          %path{:d => "M0,0 L99.99,0 L99.99,20.0 L0,20.0 L0,0 Z ", :fill => "#22D345", :height => "20.0", :stroke => "#000000", "stroke-miterlimit" => "3", "stroke-width" => "2", :transform => "matrix(1 0 0 1 435.0 210)", :width => "100"}
+
+
+        / %g
+        /   %text{ :fill => "white", :transform => "matrix(1 0 0 1 325 10)", :type => "textBox", :width => "20.0"}
+        /     %tspan{:x => "10.0", :y => "18"} ksjdfkjsd

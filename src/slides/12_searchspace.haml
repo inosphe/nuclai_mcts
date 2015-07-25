@@ -1,0 +1,89 @@
+%section#searchspace
+
+  %div{ style:"position:relative; height: 1080px; width: 1920px;" }
+
+    %h3{ style:"position: absolute; top:50px; right:100px; z-index: 3;" }
+      Search Spaces
+
+
+    %svg{ width:"1920", height:"1080", style:"position: absolute; left:0; bottom: 0px; z-index: 2;" }
+
+      %g{ transform:"translate(80,1000)" }
+      -# %g{ transform:"translate(500,500)" }
+
+    %div.fragment.fade-out{ style:"position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;", "data-fragment-index" => 2 }
+
+      %div
+        But we have a problem with large
+        %br/
+        search spaces
+        %br/
+        %br/
+
+      %div.fragment#ss_action{ "data-fragment-index" => 1 }
+        Some of the more involved plans
+        %br/
+        are just too deep to find. Despite
+        %br/
+        adjusting the scoring and model.
+
+    %div.fragment.fade-out{ style:"position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;", "data-fragment-index" => 4 }
+
+      %div.fragment{ "data-fragment-index" => 2 }
+        Delayed reward means the nodes
+        %br/
+        don't look promising until very late.
+        %br/
+        %br/
+
+      %div.fragment{ "data-fragment-index" => 3 }
+        And score diffusion means the plan
+        %br/
+        gets diluted as the score propagates
+        %br/
+        towards the root
+
+    %div.fragment.fade-out{ style:"position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;", "data-fragment-index" => 6 }
+
+      %div.fragment{ "data-fragment-index" => 4 }
+        There are things we can do that may
+        %br/
+        help here such as:
+        %br/
+        %br/
+        %div
+          %ul
+            %li Heuristics (think A*)
+            %li Node biasing (a form of heuristics)
+            %li Tree pruning
+            %li Maximal scoring policy
+
+      %div.fragment#ss_collapse{ "data-fragment-index" => 5 }
+        %br/
+        %br/
+        Our approach was to use macro actions.
+        %br/
+        %br/
+        Collapse atomic operations into larger
+        %br/
+        actions.
+
+    %div{ style:"position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;", "data-fragment-index" => 8 }
+
+      %div.fragment{ "data-fragment-index" => 6 }
+        Being more prescriptive is a trade off.
+        %br/
+        %br/
+        We make the search space smaller which
+        %br/
+        restricts the planner to reasoning
+        %br/
+        about more limited plans.
+        %br/
+        %br/
+
+      %div.fragment{ "data-fragment-index" => 7 }
+        But this gives us more control as
+        %br/
+        developers over what is does and doesn't do.
+

@@ -1,0 +1,39 @@
+- require_relative 'utils'
+- init __FILE__
+-#------------------------------------------------------------------------------
+!!! 5
+%html
+
+  %head
+
+    %title "Tactical Reasoning in Fable Legends with MCTS"
+
+    %meta{ charset: 'utf-8' }
+    %meta{ content: 'initial-scale=1,maximum-scale=1,user-scalable=no', name:'viewport' }
+
+    = inc "//reveal.css"
+    = inc "//beige.css"
+    = inc "style.css"
+
+    = inc "//jquery.js"
+    = inc "//underscore.js"
+    = inc "//d3.js"
+    = inc "//reveal.js"
+    = inc "//head.min.js"
+
+    = inc "data.js"
+    = inc "libs/MCTS.js"
+    = inc "libs/Tree.js"
+    = inc "libs/Map.js"
+
+
+
+  %body
+    .reveal
+      .slides
+
+        = slides
+
+    = inc "index.js"
+    = slidesjs
+

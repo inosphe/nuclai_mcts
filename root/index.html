@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>"Tactical Reasoning in Fable Legends with MCTS"</title>
+    <meta charset='utf-8'>
+    <meta content='initial-scale=1,maximum-scale=1,user-scalable=no' name='viewport'>
+    <link href='css/reveal.css' rel='stylesheet'>
+    <link href='css/beige.css' rel='stylesheet'>
+    <link href='style.css' rel='stylesheet'>
+    <script src='js/jquery.js' type='text/javascript'></script>
+    <script src='js/underscore.js' type='text/javascript'></script>
+    <script src='js/d3.js' type='text/javascript'></script>
+    <script src='js/reveal.js' type='text/javascript'></script>
+    <script src='js/head.min.js' type='text/javascript'></script>
+    <script src='data.js' type='text/javascript'></script>
+    <script src='libs/MCTS.js' type='text/javascript'></script>
+    <script src='libs/Tree.js' type='text/javascript'></script>
+    <script src='libs/Map.js' type='text/javascript'></script>
+  </head>
+
+  <body>
+    <div class='reveal'>
+      <div class='slides'>
+        <section>
+          <h1>
+            Tactics in
+            <a href='https://www.fablelegends.com/'>Fable Legends</a>
+          </h1>
+          <h2>A MCTS Primer</h2>
+          <h3>
+            <a href='https://www.linkedin.com/in/gwaredd'>Gwaredd Mountain</a>
+          </h3>
+        </section>
+        <section id='problem'>
+          <div class='content'>
+            <h2>The Problem</h2>
+            <svg style='margin-bottom: 100px;' viewBox='0 0 1597 897' width='90%'>
+              <image height='897' transform='matrix(1 0 0 1 0 0)' width='1597' xlink:href='res/tactics.png'></image>
+              <g>
+                <g opacity='0.4'>
+                  <path d='M0,94.88037763814054 C0,42.479387250335606 51.898209143256565,0 115.91790750739881,0 C179.93760587154105,0 231.83581501479767,42.479387250335606 231.83581501479767,94.88037763814054 C231.83581501479767,147.28136802594543 179.93760587154105,189.76075527628097 115.91790750739881,189.76075527628097 C51.898209143256565,189.76075527628097 0,147.28136802594543 0,94.88037763814054 Z '
+                  fill='#FC0000' height='189.76075527628092' opacity='0.5' stroke-miterlimit='3' stroke-width='18.040904497438678' stroke='none' transform='matrix(0.9822859176839625 -0.18738830251586155 0.18738830251586155 0.9822859176839625 416.0770925331322 148.28010392303264)'
+                  width='231.83581501479767'></path>
+                </g>
+                <path d='M1295.6128236724514,152.99448069769858 L1264.6394317985892,-7.034710650590938 ' fill='none' height='160.02919134828952' stroke-miterlimit='3' stroke-width='20' stroke='#FF0000' width='30.973391873862283'></path>
+                <path d='M539.9085771048979,-1.2020520593816908 L542.3991725648416,190.16081201147736 ' fill='none' height='191.36286407085905' stroke-miterlimit='3' stroke-width='18.040904497438678' stroke='#FF0000' transform='matrix(1 0 0 1 0.05521291748056001 -11.400281906309488)'
+                width='2.4905954599437337'></path>
+                <path d='M524.4921669302167,168.16864408146893 L560.6372165780357,168.01612991224627 L542.4859689454761,201.5171571497496 ' fill='#FF0000' height='33.50102723750334' stroke-miterlimit='3' stroke-width='18.040904497438678' stroke='none' width='36.14504964781895'></path>
+                <g transform='matrix(1 0 0 1 546.951 162.788)'>
+                  <path d='M546.951,220.23 L767.047,179.17 ' fill='#000AF8' height='40.06' stroke-miterlimit='3' stroke-width='20' stroke='#000AF8' transform='matrix(1 0 0 1 -546.1082910130951 -162.7026577190788)' width='220.89369494090954'></path>
+                  <path d='M752.408,162.76 L758.006,201.42 L808.38,172.081 ' fill='#000AF8' height='38.66' stroke-miterlimit='3' stroke-width='20' stroke='none' transform='matrix(1 0 0 1 -546.951 -162.788)' width='55.24'></path>
+                </g>
+              </g>
+              <g>
+                <path d='M0,99.42118226600988 C0,44.51237450246306 46.243411288669975,0 103.28756157635473,0 C160.3317118640395,0 206.57512315270947,44.51237450246306 206.57512315270947,99.42118226600988 C206.57512315270947,154.3299900295567 160.3317118640395,198.84236453201976 103.28756157635473,198.84236453201976 C46.243411288669975,198.84236453201976 0,154.3299900295567 0,99.42118226600988 Z '
+                fill='none' height='198.84236453201976' id='puckinvis' stroke-miterlimit='3' stroke-width='10' stroke='rgb(255, 0, 0)' transform='matrix(1 0 0 1 1080.5686255840258 267.1602310394003)' width='206.57512315270947'></path>
+                <g id='puckmove' transform='matrix(1 0 0 1 139.55849753694577 283.2399104715922)'>
+                  <g>
+                    <path d='M1100.4791494198878,430.23066429473215 Q686.876851284998,858.5815741530589 402.4722906403941,788.7413793103448 Q136.98109289342642,723.7013346805854 139.55849753694582,573.3288177339901 Q136.29473019079978,481.33144318677944 332.78877228137173,311.02752176031254 '
+                    fill='none' height='486.69998547156456' stroke-miterlimit='3' stroke-width='20' stroke='rgb(255, 0, 0)' transform='matrix(1 0 0 1 -139.55849753694577 -283.2399104715922)' width='960.9206518829419'></path>
+                    <path d='M299.76867023158104,310.39251979781653 L353.9534964620701,283.2399104715922 L335.0112791501076,339.9201110538794 ' fill='#FF0000' height='56.68020058228717' stroke-miterlimit='3' stroke-width='20' stroke='none' transform='matrix(1 0 0 1 -139.55849753694577 -283.2399104715922)'
+                    width='54.18482623048908'></path>
+                  </g>
+                </g>
+                <g transform='matrix(1 0 0 1 849.7525270058261 153.98445226937417)'>
+                  <g transform='matrix(1 0 0 1 0 69.50268068794901)'>
+                    <path d='M907.1213908214324,431.476232896007 L865.7484488092107,260.52446058705027 ' fill='none' height='170.95177230895672' stroke-miterlimit='3' stroke-width='20' stroke='#FF0000' transform='matrix(1 0 0 1 -849.7525270058261 -223.48713295732318)' width='41.372942012221756'></path>
+                    <path d='M849.7525270058261,280.3794372468352 L857.3624526888717,223.48713295732318 L887.954465894982,271.4421806858205 ' fill='#FF0000' height='56.892304289512026' stroke-miterlimit='3' stroke-width='20' stroke='none' transform='matrix(1 0 0 1 -849.7525270058261 -223.48713295732318)'
+                    width='38.20193888915594'></path>
+                  </g>
+                </g>
+              </g>
+              <g transform='translate(1000,600)'>
+                <rect fill='black' height='250' opacity='0.8' width='550'></rect>
+                <text fill='white' font-size='36' text-align='center' text-anchor='middle' width='530'>
+                  <tspan x='275' y='50'>
+                    A system that makes tactical
+                  </tspan>
+                  <tspan x='275' y='90'>
+                    decisions
+                  </tspan>
+                  <tspan x='275' y='160'>
+                    Assigns orders
+                  </tspan>
+                  <tspan x='275' y='210'>
+                    Interacts with objects
+                  </tspan>
+                </text>
+              </g>
+            </svg>
+          </div>
+        </section>
+        <section id='solutions'>
+          <h3>Traditionally approaches are typically ...</h3>
+          <ul>
+            <li>Rule based systems (with utility scoring)</li>
+            <li>Some form of planning (STRIPS/HTN)</li>
+          </ul>
+          <br>
+          <br>
+          <span class='fragment'>
+            These are valid and have their own pros and cons
+          </span>
+          <br>
+          <br>
+          <span class='fragment'>
+            But why would I want to do a thing like that? I chose something else.
+            <br>
+            And the reasons? There are no reasons.
+            <br>
+            Who needs reasons when you've got ...
+            <br>
+            <br>
+            <h3>MCTS</h3>
+          </span>
+        </section>
+        <section id='mcts'>
+          <div class='content' style='position: relative;'>
+            <h3 class='fable' style='position: absolute; top: 20px; right: 0px;'>
+              MCTS
+            </h3>
+            <h3 class='fragment fade-out' data-fragment-index='1' style='position: absolute; top: 400px; width: 100%;'>
+              It works something like this ...
+            </h3>
+            <div class='fragment fade-out' data-fragment-index='13' id='xox_continue' style='position: absolute; top: 700px; left: 0px;'>
+              <div class='fragment' data-fragment-index='11'>
+                $${ Score_{child} \over Visits_{child} } + C \sqrt{\frac{\ln Visits_{parent}}{ Visits_{child} }}$$
+              </div>
+            </div>
+            <svg class='fragment' data-fragment-index='1' height='920' style='display:block; margin-top: 20px;' width='1680'>
+              <defs>
+                <g id='nought'>
+                  <circle fill='none' r='30' stroke-width='2'></circle>
+                </g>
+                <g id='cross'>
+                  <line style='stroke-width:2;' x1='-30' x2='30' y1='-30' y2='30'></line>
+                  <line style='stroke-width:2;' x1='-30' x2='30' y1='30' y2='-30'></line>
+                </g>
+                <g id='highlight'>
+                  <rect height='98' style='fill:powderblue; stroke-width:0; fill-opacity: 0.7;' transform='translate( -49, -49 )' width='98'></rect>
+                </g>
+                <g id='highlight_o'>
+                  <rect height='98' style='fill:#d7191c; stroke-width:0; fill-opacity: 0.5;' transform='translate( -49, -49 )' width='98'></rect>
+                </g>
+                <g id='highlight_x'>
+                  <rect height='98' style='fill:#1a9641; stroke-width:0; fill-opacity: 0.5;' transform='translate( -49, -49 )' width='98'></rect>
+                </g>
+                <g id='score'>
+                  <rect height='98' style='fill:coral; stroke-width:0; fill-opacity: 0.6;' transform='translate( -49, -49 )' width='98'></rect>
+                </g>
+              </defs>
+              <g id='tree'></g>
+              <g display='none' id='iter' transform='translate(100,120)'>
+                <text font-size='64'>
+                  Iteration 1
+                </text>
+              </g>
+              <g id='board' transform='scale( 1 )'>
+                <g>
+                  <line stroke='black' style='stroke-width:2;' x1='0' x2='300' y1='100' y2='100'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='0' x2='300' y1='200' y2='200'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='100' x2='100' y1='0' y2='300'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='200' x2='200' y1='0' y2='300'></line>
+                  <text text-anchor='middle' x='150' y='400'></text>
+                </g>
+                <g>
+                  <g id='p0' transform='translate( 50,50 )'></g>
+                  <g id='p1' transform='translate( 150,50 )'></g>
+                  <g id='p2' transform='translate( 250,50 )'></g>
+                  <g id='p3' transform='translate( 50,150 )'></g>
+                  <g id='p4' transform='translate( 150,150 )'></g>
+                  <g id='p5' transform='translate( 250,150 )'></g>
+                  <g id='p6' transform='translate( 50,250 )'></g>
+                  <g id='p7' transform='translate( 150,250 )'></g>
+                  <g id='p8' transform='translate( 250,250 )'></g>
+                </g>
+                <g id='win'>
+                  <line style='stroke-width:5' x1='0' x2='300' y1='0' y2='300'></line>
+                </g>
+              </g>
+              <g display='none' id='board2' transform='scale( 1 )'>
+                <g>
+                  <line stroke='black' style='stroke-width:2;' x1='0' x2='300' y1='100' y2='100'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='0' x2='300' y1='200' y2='200'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='100' x2='100' y1='0' y2='300'></line>
+                  <line stroke='black' style='stroke-width:2;' x1='200' x2='200' y1='0' y2='300'></line>
+                </g>
+                <g>
+                  <g transform='translate( 50,50 )'>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='-30' y2='30'></line>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='30' y2='-30'></line>
+                  </g>
+                  <g transform='translate( 150,50 )'></g>
+                  <g transform='translate( 250,50 )'></g>
+                  <g transform='translate( 50,150 )'>
+                    <circle fill='none' r='30' stroke-width='2' style='stroke-width:2; stroke:black'></circle>
+                  </g>
+                  <g transform='translate( 150,150 )'>
+                    <rect height='98' style='fill:#1a9641; stroke-width:0; fill-opacity: 0.6;' transform='translate( -49, -49 )' width='98'></rect>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='-30' y2='30'></line>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='30' y2='-30'></line>
+                  </g>
+                  <g transform='translate( 250,150 )'></g>
+                  <g transform='translate( 50,250 )'>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='-30' y2='30'></line>
+                    <line style='stroke-width:2; stroke:black' x1='-30' x2='30' y1='30' y2='-30'></line>
+                  </g>
+                  <g transform='translate( 150,250 )'>
+                    <circle fill='none' r='30' stroke-width='2' style='stroke-width:2; stroke:black'></circle>
+                  </g>
+                  <g transform='translate( 250,250 )'></g>
+                  <text text-anchor='middle' x='150' y='400'>
+                    &#126;200
+                  </text>
+                </g>
+              </g>
+            </svg>
+            <span class='fragment current-visible xox_frag' data-fragment-index='1' id='xox_xox'>
+              Take the game noughts and crosses (tic-tac-toe)
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='2' id='xox_pickone'>
+              Pick a move at random
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='3' id='xox_transition1'>
+              Play the game to the end by making random moves
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='4' id='xox_playtoend'>
+              Play the game to the end by making random moves
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='5' id='xox_playtoend2'>
+              Remember the result for this move
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='6' id='xox_playtoend3'>
+              Keep doing this until we have no untried moves left
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='7' id='xox_first9'>
+              After 9 iterations, we have tried each move once
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='8' id='xox_select'>
+              So this time we select one of the promising looking moves
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='9' id='xox_select2'>
+              Then expand the next untried move as before
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='10' id='xox_select3'>
+              The phases of the algorithm are SELECT, EXPAND, SIMULATE and PROPAGATE the score
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='11' id='xox_select4'>
+              Selection is done by the UCT formula
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='12' id='xox_select5'>
+              This balances exploiting promising moves against exploring relatively unvisited nodes
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='13' id='xox_continue'>
+              Keep doing this until you feel like stopping ...
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='14' id='xox_stop'>
+              Now we have a map of probabilities from sampling potential games for each possible move
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='15' id='xox_rank'>
+              Rank them according to average score
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='16' id='xox_move'>
+              Pick the most promising move to play
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='17' id='xox_tactics'>
+              Ostensibly, the efficacy of the algorithm depends on the number of iterations
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='18' id='xox_tactics2'>
+              At about 70 iterations it consistently spots blocking the opponents line
+            </span>
+            <span class='fragment current-visible xox_frag' data-fragment-index='19' id='xox_tactics3'>
+              At about 200 iterations it can spot forks - it got cleverer with more time!
+            </span>
+          </div>
+        </section>
+        <section id='mcts2'>
+          <h3>Sweet ...</h3> It worked out how to play noughts and crosses!
+          <br>
+          <br>
+          <span class='fragment'>So if we give it the rules of our game, maybe it can do the same</span>
+        </section>
+        <section id='mcts_challenges'>
+          <h3>In real time?</h3>
+          <span class='fragment'>
+            But real time games are not convenient
+            <br>
+            deterministic turn based board games :/
+            <br>
+            <br>
+          </span>
+          <div style='position: relative; height: 240px;'>
+            <div class='fragment current-visible' style='position: absolute; top: 0px; left: calc( 50% - 310px );'>
+              <ul>
+                <li>The space is continous</li>
+                <li>The game is nondeterministic</li>
+                <li>Actions take time and happen simultaneously</li>
+                <li>
+                  Does it make sense to play to the end?
+                  <br> Or should we have a shorter planning horizon?
+                </li>
+              </ul>
+            </div>
+            <div class='fragment' style='position: absolute; top: 0px; left: calc( 50% - 310px );'>
+              <ul>
+                <li>We also have a limited CPU budget</li>
+                <li>
+                  We need authorial control
+                  <br> (i.e. as developers we need to be able to
+                  <br> control what it does)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <section id='legends_model'>
+          <div height='940' style='position: relative; height: 1080px;' width='100%'>
+            <h3 style='position: absolute; top: 80px; right: 150px;'>Modelling</h3>
+            <svg height='1080' style='display:block; position: absolute; top: 0px; left: 0px;' width='1920'>
+              <defs>
+                <marker id='arrowhead' markerHeight='4' markerWidth='8' orient='auto' refX='9' refY='2'>
+                  <path d='M 0,0 V 4 L6,2 Z'></path>
+                </marker>
+              </defs>
+              <g transform='translate(1100,450) rotate(0) scale(1.2)'>
+                <g id='map' transform='scale(0.1) translate( -3890,-27744 )'></g>
+              </g>
+              <g id='tree'></g>
+            </svg>
+            <h3 class='fragment fade-out' data-fragment-index='1' id='lm_start' style='position: absolute; top: 40%; width: 100%;'>So this was our approach ...</h3>
+            <div class='fragment current-visible' data-fragment-index='1' style='position: absolute; bottom: 150px; right: 150px; text-align: right;'>
+              Create a board game simulation
+              <br> using a pre-processed stripped down
+              <br> verson of the nav mesh
+            </div>
+            <span class='fragment' data-fragment-index='2' id='lm_zoom'></span>
+            <div class='fragment current-visible' data-fragment-index='3' id='lm_show' style='position: absolute; bottom: 150px; right: 150px; text-align: right;'>
+              Populate the board with the current
+              <br> positions of actors from the game
+            </div>
+            <div class='fragment current-visible' data-fragment-index='4' id='lm_step1' style='position: absolute; bottom: 150px; right: 150px; text-align: right;'>
+              Each turn, actors can make one action
+              <br> move, attack, use an ability, etc
+            </div>
+            <div class='fragment current-visible' data-fragment-index='5' id='lm_showtree' style='position: absolute; top: 230px; right: 150px; text-align: right;'>
+              We step the simulation until
+              <br> the villain can issue an order
+            </div>
+            <div class='fragment current-visible' data-fragment-index='6' id='lm_step2' style='position: absolute; top: 230px; right: 150px; text-align: right;'>
+              And keep stepping, issuing orders
+              <br> until we reach a leaf node
+            </div>
+            <div class='fragment current-visible' data-fragment-index='7' id='lm_step3' style='position: absolute; top: 230px; right: 150px; text-align: right;'>
+              Then step to the end of our
+              <br> planning horizon
+            </div>
+            <span class='fragment' data-fragment-index='8' id='lm_step4'></span>
+            <span class='fragment' data-fragment-index='9' id='lm_step5'></span>
+            <div class='fragment current-visible' data-fragment-index='10' id='lm_step6' style='position: absolute; top: 230px; right: 150px; text-align: right;'>
+              Now we score this potential game
+              <br> by looking at the difference
+              <br> between start and end health
+            </div>
+            <div class='fragment' data-fragment-index='11' id='lm_score' style='position: absolute; top: 250px; right: 150px; text-align: right;'>
+              $$RSI = 1 - { 1 \over 1 + RS }$$
+              <br>
+              <br> $$RS = { gains \over losses }$$
+              <br>
+              <br> Using the RSI formula to
+              <br> normalize the results
+            </div>
+          </div>
+        </section>
+        <section id='implementation'>
+          <div style='position: relative; width: 1920px; height: 1080px; top: 0px; left: 0px;'>
+            <h3 style='position: absolute; top: 20px; right: 200px;'>
+              Planning Loop
+            </h3>
+            <div id='pegap' style='position: absolute; top: 750px; left: 750px; font-size: 56px; display: none;'>
+              Plan Execution Gap
+            </div>
+            <svg id='arch' style='height: 784px; width: 1326px; position: absolute; top: 50px; left: 297px;' viewbox='0 0 1150 680'>
+              <g>
+                <path d='M0,-12.993492609619175 L-0.9458128078818504,637.943964913896 ' fill='#FFFFFF' height='650.9374575235151' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 96.23606473256774 22.99349260961918)' width='0.9458128078819072'></path>
+                <text fill='#666666' font-size='56' height='63' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0 -1 1 0 10 494.62781298065465)' type='textBox' width='319.59598925024454'>
+                  <tspan x='159.79799462512227' y='56'>The Game</tspan>
+                </text>
+                <g id='highlights'>
+                  <path class='sim' d='M0,0 L51.74325834485563,-0.38210147971312836 ' fill='#FFFFFF' height='0.38210147971312836' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 96.07912312530064 115.98478032650978)' width='51.74325834485563'></path>
+                  <path class='sim' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(1 0 0 1 -522.8259975625845 -228.89686730852145)' width='24.878452108465012'></path>
+                  <path class='sim' d='M-36.590189503173335,0 L51.74325834485563,-0.38210147971312836 ' fill='#FFFFFF' height='0.38210147971312836' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 413.8521361678563 115.98478032650975)'
+                  width='88.33344784802897'></path>
+                  <path class='sim' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(1 0 0 1 -205.05298452002876 -228.89686730852145)' width='24.878452108465012'></path>
+                  <path class='sim' d='M0,0 L300,0 L300,99.99999999999996 L0,99.99999999999996 L0,0 Z ' fill-opacity='0.68' fill='#9BBBFF' height='99.99999999999996' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 481.39996930225544 65.79372958665337)'
+                  width='299.9999999999998'></path>
+                  <text fill='#000000' font-size='32' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(1 0 0 1 534.9611419875239 95.08546538476696)' type='textBox' width='192.8776546294646'>
+                    <tspan x='96.4388273147323' y='32'>Snapshot</tspan>
+                  </text>
+                  <path class='sim' d='M0,0 L210,0 L210,70 L0,70 L0,0 Z ' fill-opacity='0.49333333333333335' fill='#A7F89C' height='70' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 164.999999999997 80.79372958665321)' width='209.99999999999994'></path>
+                  <text fill='#000000' font-size='24' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.9999999999999997 0 0 0.9999999999999999 202.01062674311044 94.18271065080484)' type='textBox'
+                  width='135.97874651377322'>
+                    <tspan x='67.98937325688661' y='32'>Importers</tspan>
+                  </text>
+                  <path class='run' d='M-18.514599858925916,0 L51.74325834485563,-0.38210147971312836 ' fill='#FFFFFF' height='0.38210147971312836' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(0 1 -1 0 631.2089185623995 202.35648120727168)'
+                  width='70.25785820378155'></path>
+                  <path class='run' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(0 1 -1 0 976.090566197431 -416.54863948061325)' width='24.878452108465012'></path>
+                  <path class='run' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(0 -1 1 0 286.7093724070809 851.9764834604522)' width='24.878452108465012'></path>
+                  <path class='run' d='M0,0 L300,0 L300,149.99999999999991 L0,149.99999999999991 L0,0 Z ' fill-opacity='0.5266666666666666' fill='#9BBBFF' height='149.99999999999997' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 481.39996930225607 269.8613376474672)'
+                  width='300'></path>
+                  <text fill='#000000' font-size='32' height='53' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.9999999999999993 0 0 0.9999999999999993  490.71336962720113 312.04205450973274)' type='textBox'
+                  width='281.37319935011067'>
+                    <tspan x='140.68659967505533' y='48'>Simulation</tspan>
+                  </text>
+                  <path class='exec' d='M-36.590189503173335,0 L51.74325834485563,-0.38210147971312836 ' fill='#FFFFFF' height='0.38210147971312836' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(-1 0 0 -1 443.04402819052 344.67028690761083)'
+                  width='88.33344784802897'></path>
+                  <path class='exec' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(-1 0 0 -1 1061.949148878405 689.5519345426419)' width='24.878452108465012'></path>
+                  <path class='exec' d='M0,0 L51.74325834485563,-0.38210147971312836 ' fill='#FFFFFF' height='0.38210147971312836' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(-1 0 0 -1 163.134746628405 344.67028690761094)' width='51.74325834485563'></path>
+                  <path class='exec' d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(-1 0 0 -1 782.03986731629 689.5519345426422)' width='24.878452108465012'></path>
+                  <path class='exec' d='M0,0 L210,0 L210,70 L0,70 L0,0 Z ' fill-opacity='0.49333333333333335' fill='#A7F89C' height='70' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 164.999999999997 309.86133764746717)' width='209.99999999999994'></path>
+                  <text fill='#000000' font-size='22' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.9999999999999992 0 0 0.9999999999999993 180.4318802748814 323.25031871161895)' type='textBox'
+                  width='179.1362394502317'>
+                    <tspan x='89.56811972511585' y='32'>Interpreters</tspan>
+                  </text>
+                </g>
+                <g>
+                  <path d='M-32.77416415840045,0 L46.34690517079039,-0.3422517563129617 ' fill='#FFFFFF' height='0.3422517563129759' stroke-miterlimit='3' stroke-width='4.478545288151362' stroke='#666666' transform='matrix(1 0 0 1 828.8162025774318 341.9851076585718)'
+                  width='79.12106932919085'></path>
+                  <path d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(1 0 0 1 206.02295588115618 -2.8766151147594883)' width='24.878452108465012'></path>
+                  <path d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(-1 0 0 -1 1467.702000214535 686.6283219648744)' width='24.878452108465012'></path>
+                  <path d='M0,0 L240.3597438990946,0 L240.3597438990946,102.50556213758858 L0,102.50556213758858 L0,0 Z ' fill='#FF7F50' height='102.50556213758858' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(1 0 0 1 890.5515861501675 293.6085565786729)'
+                  width='240.3597438990946'></path>
+                  <text fill='#000000' font-size='32' height='36' stroke-miterlimit='3' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.9999999999999999 0 0 1 937.3789375170289 326.8613376474672)' type='textBox' width='146.70504116537185'>
+                    <tspan x='73.35252058268593' y='32'>Rules</tspan>
+                  </text>
+                </g>
+                <g id='tree' opacity='1'>
+                  <path d='M-18.514599858925916,0 L25.925035188662406,-0.38210147971311414 ' fill='#FFFFFF' height='0.38210147971311414' stroke-miterlimit='3' stroke-width='5' stroke='#666666' transform='matrix(0 1 -1 0 631.2089185623993 451.27733309885724)' width='44.439635047588325'></path>
+                  <path d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(0 1 -1 0 976.0905661974309 -185.5591044191695)' width='24.878452108465012'></path>
+                  <path d='M683.9097312099136,344.5325615550584 L659.0682038539362,353.54806609675063 L659.0365134449254,335.8331276935988 L683.9149655533904,344.5168585246281 ' fill='#666666' height='17.714938403151848' stroke-miterlimit='3' stroke-width='0.23347063724070463'
+                  stroke='#666666' transform='matrix(0 -1 1 0 286.70937240708065 1106.7006429938824)' width='24.878452108465012'></path>
+                  <path d='M0,0 L197.37464398238905,0 L197.37464398238905,154.50123810069078 L0,154.50123810069078 L0,0 Z ' fill-opacity='0.48' fill='#C0B870' height='154.501238100691' stroke-miterlimit='3' stroke-width='5' stroke='#888888' transform='matrix(1 0 0 1 532.7126473110617 500.8545890542462)'
+                  width='197.37464398238887'></path>
+                  <g transform='matrix(1 0 0 1 557.0960649034947 523.7364975689125)'>
+                    <path d='M0,0 L-21.614741036423652,43.998217030747924 ' fill='#FFFFFF' height='43.99821703074804' stroke-miterlimit='3' stroke-width='1.1260947617952635' stroke='#0049A8' transform='matrix(1 0 0 1 115.85383929826742 54.36871053567927)' width='21.614741036423652'></path>
+                    <path d='M0,0 L22.155689067687604,43.998217030747924 ' fill='#FFFFFF' height='43.99821703074804' stroke-miterlimit='3' stroke-width='1.1260947617952635' stroke='#0049A8' transform='matrix(1 0 0 1 115.85383929826742 54.36871053567927)' width='22.155689067687604'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622245003 4.8683396222451165,0 10.873742107135968,0 C16.87914459202716,0 21.74748421427182,4.868339622245003 21.74748421427182,10.873742107135627 C21.74748421427182,16.879144592027046 16.87914459202716,21.747484214271594 10.873742107135968,21.747484214271594 C4.8683396222451165,21.747484214271594 0,16.879144592027046 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.126094761795262' stroke='#0049A8' transform='matrix(1 0 0 1 126.8603245832511 86.98993685708672)' width='21.74748421427148'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622245003 4.868339622244662,0 10.873742107135968,0 C16.879144592027046,0 21.747484214271708,4.868339622245003 21.747484214271708,10.873742107135627 C21.747484214271708,16.879144592027046 16.879144592027046,21.747484214271594 10.873742107135968,21.747484214271594 C4.868339622244662,21.747484214271594 0,16.879144592027046 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.126094761795262' stroke='#0049A8' transform='matrix(1 0 0 1 83.3653561547078 86.98993685708672)' width='21.747484214271708'></path>
+                    <path d='M0,0 L-21.614741036423197,43.998217030747924 ' fill='#FFFFFF' height='43.99821703074804' stroke-miterlimit='3' stroke-width='1.1260947617952635' stroke='#0049A8' transform='matrix(1 0 0 1 32.488483143559165 54.36871053567927)' width='21.61474103642297'></path>
+                    <path d='M0,0 L22.15568906768806,43.998217030747924 ' fill='#FFFFFF' height='43.99821703074804' stroke-miterlimit='3' stroke-width='1.1260947617952635' stroke='#0049A8' transform='matrix(1 0 0 1 32.488483143559165 54.36871053567927)' width='22.155689067688286'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622245003 4.868339622244548,0 10.87374210713574,0 C16.879144592026933,0 21.74748421427148,4.868339622245003 21.74748421427148,10.873742107135627 C21.74748421427148,16.879144592027046 16.879144592026933,21.747484214271594 10.87374210713574,21.747484214271594 C4.868339622244548,21.747484214271594 0,16.879144592027046 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.126094761795262' stroke='#0049A8' transform='matrix(1 0 0 1 43.494968428543416 86.98993685708672)' width='21.747484214271708'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622245003 4.868339622244434,0 10.873742107135513,0 C16.87914459202682,0 21.747484214271367,4.868339622245003 21.747484214271367,10.873742107135627 C21.747484214271367,16.879144592027046 16.87914459202682,21.747484214271594 10.873742107135513,21.747484214271594 C4.868339622244434,21.747484214271594 0,16.879144592027046 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.126094761795262' stroke='#0049A8' transform='matrix(1 0 0 1 0 86.98993685708672)' width='21.747484214271708'></path>
+                    <path d='M0,0 L-42.458260293369676,44.04252373715167 ' fill='#D8E6EE' height='44.04252373715178' stroke-miterlimit='3' stroke-width='1.1260947617952626' stroke='#0049A8' transform='matrix(1 0 0 1 74.56055964656991 11.214502935510382)' width='42.45826029336945'></path>
+                    <path d='M0,0 L42.14140760461248,43.40881835963887 ' fill='#D8E6EE' height='43.408818359638985' stroke-miterlimit='3' stroke-width='1.1260947617952626' stroke='#0049A8' transform='matrix(1 0 0 1 74.56055964656991 11.214502935510382)' width='42.14140760461271'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622244662 4.868339622245003,0 10.873742107135854,0 C16.879144592027046,0 21.74748421427148,4.868339622244662 21.74748421427148,10.873742107135627 C21.74748421427148,16.879144592026705 16.879144592027046,21.74748421427148 10.873742107135854,21.74748421427148 C4.868339622245003,21.74748421427148 0,16.879144592026705 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.1260947617952626' stroke='#0049A8' transform='matrix(1 0 0 1 105.11284036897939 43.494968428543416)' width='21.74748421427148'></path>
+                    <path d='M0,10.873742107135968 C0,4.868339622244889 4.868339622244662,0 10.873742107135854,0 C16.87914459202682,0 21.747484214271708,4.868339622244889 21.747484214271708,10.873742107135968 C21.747484214271708,16.879144592026933 16.87914459202682,21.747484214271708 10.873742107135854,21.747484214271708 C4.868339622244662,21.747484214271708 0,16.879144592026933 0,10.873742107135968 Z '
+                    fill='#7ABFE6' height='21.74748421427182' stroke-miterlimit='3' stroke-width='1.1260947617952626' stroke='#0049A8' transform='matrix(1 0 0 1 63.43016229162561 0)' width='21.747484214271708'></path>
+                    <path d='M0,10.873742107135627 C0,4.868339622244662 4.868339622244207,0 10.8737421071354,0 C16.879144592026364,0 21.747484214271253,4.868339622244662 21.747484214271253,10.873742107135627 C21.747484214271253,16.879144592026705 16.879144592026364,21.74748421427148 10.8737421071354,21.74748421427148 C4.868339622244207,21.74748421427148 0,16.879144592026705 0,10.873742107135627 Z '
+                    fill='#7ABFE6' height='21.747484214271708' stroke-miterlimit='3' stroke-width='1.1260947617952626' stroke='#0049A8' transform='matrix(1 0 0 1 21.747484214271594 43.494968428543416)' width='21.747484214271594'></path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <svg display='none' id='planexec' style='position: absolute; width: 930px; height: 165px; left: 540px; top: 800px;' viewbox='0 0 620 110'>
+              <g id='arrow' style='display:none;' transform='matrix(1 0 0 1 100.26687840539488 32.92924002537765)'>
+                <path d='M-2.7331215946052936,-0.017749780508850677 L402.7481024653783,0 ' fill='#00FF00' height='0.017749780508850677' stroke-miterlimit='3' stroke-width='3' stroke='rgb(0, 0, 0)' transform='matrix(1 0 0 1 2.733121594605308 7.070759974622376)' width='405.48122405998356'></path>
+                <path d='M578.2451644684243,262.92924002537757 L578.2135778589387,276.7946042385154 L597,270.02069390029567 ' fill='#000000' height='13.86536421313781' stroke-miterlimit='3' stroke-width='0.01' stroke='#000000' transform='matrix(1 0 0 1 -180.26687840539466 -262.92924002537757)'
+                width='18.789625891526953'></path>
+              </g>
+              <path d='M0,0 L0.5334411953183746,-59.99999999999997 ' fill='#00FF00' height='59.99999999999997' id='red' stroke-miterlimit='3' stroke-width='6.41757401370316' stroke='#B80000' style='display:none;' transform='matrix(0.9999999999999999 0 0 0.9999999999999999 519.9999999999991 69.99999999999997)'
+              width='0.5334411953183746'></path>
+              <path d='M0,0 L0.5334411953183746,-59.99999999999997 ' fill='#00FF00' height='59.99999999999997' id='green' stroke-miterlimit='3' stroke-width='6.41757401370316' stroke='#00B800' transform='matrix(1 0 0 1 99.99999999999905 69.99999999999997)' width='0.5334411953183746'></path>
+              <g transform='matrix(1 0 0 1 10 69.99999999999997)'>
+                <g transform='matrix(1 0 0 1 0 0)'>
+                  <g transform='matrix(1 0 0 1 0 0)'>
+                    <path d='M0,0 L599.9999999999999,0 ' fill='#FFFFFF' stroke-miterlimit='3' stroke-width='6.721860200748345' stroke='#000000' transform='matrix(1 0 0 1 0 0)' width='600'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 30 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 90 0.3817733990126726)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 150 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 449.9999999999999 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 210 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 510 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 330 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 389.99999999999994 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 269.99999999999994 0)'></path>
+                    <path d='M0,0 L0,25 ' fill='#FFFFFF' height='25' stroke-miterlimit='3' stroke-width='4.7890232105974775' stroke='#000000' transform='matrix(1 0 0 1 569.9999999999999 0)'></path>
+                  </g>
+                </g>
+              </g>
+            </svg>
+            <div class='fragment fade-out' data-fragment-index='1' id='imp_snapshot' style='position: absolute; bottom: 150px; width: 100%; text-align: middle;'>
+              The high level planning loop
+            </div>
+            <div class='fragment current-visible' data-fragment-index='1' style='position: absolute; bottom: 350px; width: 100%; text-align: middle;'>
+              We take a snapshot of the game state
+            </div>
+            <div class='fragment current-visible' data-fragment-index='2' id='imp_simulate' style='position: absolute; bottom: 350px; width: 100%; text-align: middle;'>
+              Execution is time sliced over several frames
+            </div>
+            <div class='fragment current-visible' data-fragment-index='3' id='imp_exec' style='position: absolute; bottom: 350px; width: 100%; text-align: middle;'>
+              Actions are "interpreted" before being given to the game
+              <br> This lets us do some extra logic if required
+            </div>
+            <div class='fragment current-visible' data-fragment-index='4' id='imp_delay' style='position: absolute; bottom: 370px; width: 100%; text-align: middle;'>
+              We can control the planning-execution gap. A longer
+              <br> gap gives us more time to think deeply but runs the risk
+              <br> of stale order. Sometimes we want to "think fast"
+            </div>
+          </div>
+        </section>
+        <section id='searchspace'>
+          <div style='position:relative; height: 1080px; width: 1920px;'>
+            <h3 style='position: absolute; top:50px; right:100px; z-index: 3;'>
+              Search Spaces
+            </h3>
+            <svg height='1080' style='position: absolute; left:0; bottom: 0px; z-index: 2;' width='1920'>
+              <g transform='translate(80,1000)'></g>
+            </svg>
+            <div class='fragment fade-out' data-fragment-index='2' style='position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;'>
+              <div>
+                But we have a problem with large
+                <br> search spaces
+                <br>
+                <br>
+              </div>
+              <div class='fragment' data-fragment-index='1' id='ss_action'>
+                Some of the more involved plans
+                <br> are just too deep to find. Despite
+                <br> adjusting the scoring and model.
+              </div>
+            </div>
+            <div class='fragment fade-out' data-fragment-index='4' style='position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;'>
+              <div class='fragment' data-fragment-index='2'>
+                Delayed reward means the nodes
+                <br> don't look promising until very late.
+                <br>
+                <br>
+              </div>
+              <div class='fragment' data-fragment-index='3'>
+                And score diffusion means the plan
+                <br> gets diluted as the score propagates
+                <br> towards the root
+              </div>
+            </div>
+            <div class='fragment fade-out' data-fragment-index='6' style='position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;'>
+              <div class='fragment' data-fragment-index='4'>
+                There are things we can do that may
+                <br> help here such as:
+                <br>
+                <br>
+                <div>
+                  <ul>
+                    <li>Heuristics (think A*)</li>
+                    <li>Node biasing (a form of heuristics)</li>
+                    <li>Tree pruning</li>
+                    <li>Maximal scoring policy</li>
+                  </ul>
+                </div>
+              </div>
+              <div class='fragment' data-fragment-index='5' id='ss_collapse'>
+                <br>
+                <br> Our approach was to use macro actions.
+                <br>
+                <br> Collapse atomic operations into larger
+                <br> actions.
+              </div>
+            </div>
+            <div data-fragment-index='8' style='position: absolute; top: 200px; right: 100px; z-index: 3; text-align: left;'>
+              <div class='fragment' data-fragment-index='6'>
+                Being more prescriptive is a trade off.
+                <br>
+                <br> We make the search space smaller which
+                <br> restricts the planner to reasoning
+                <br> about more limited plans.
+                <br>
+                <br>
+              </div>
+              <div class='fragment' data-fragment-index='7'>
+                But this gives us more control as
+                <br> developers over what is does and doesn't do.
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id='interpreters'>
+          <svg height='804px' viewbox='0 0 800 670' width='960px'>
+            <path d='M0,-12.99 L-0.94,637.94 ' fill='#FFFFFF' height='650.93' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(1 0 0 1 96.23 22.99)' width='0.94'></path>
+            <text fill='#AAAAAA' font-size='56' height='63' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0 -1.00 1.00 0 10.00 494.62)' type='textBox' width='319.59'>
+              <tspan x='159.79' y='56'>The Game</tspan>
+            </text>
+            <path d='M0,0 L51.74,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(1 0 0 1 96.07 115.98)' width='51.74'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(1 0 0 1 -522.82 -228.89)' width='24.87'></path>
+            <path d='M-36.59,0 L51.74,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(1 0 0 1 413.85 115.98)' width='88.33'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(1 0 0 1 -205.05 -228.89)' width='24.87'></path>
+            <path d='M-18.51,0 L51.74,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(0 1.00 -1.00 0 631.20 202.35)' width='70.25'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(0 1.00 -1.00 0 976.09 -416.54)' width='24.87'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(0 -1.00 1.00 0 286.70 851.97)' width='24.87'></path>
+            <path d='M-36.59,0 L51.74,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(-0.99 0 0 -0.99 443.04 344.67)' width='88.33'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(-1 0 0 -1 1061.94 689.55)' width='24.87'></path>
+            <path d='M0,0 L51.74,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(-1 0 0 -1 163.13 344.67)' width='51.74'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(-1 0 0 -1 782.03 689.55)' width='24.87'></path>
+            <path d='M-18.51,0 L25.92,-0.38 ' fill='#FFFFFF' height='0.38' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(0 1.00 -1.00 0 631.20 451.27)' width='44.43'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(0 1.00 -1.00 0 976.09 -185.55)' width='24.87'></path>
+            <path d='M683.90,344.53 L659.06,353.54 L659.03,335.83 L683.91,344.51 ' fill='#AAAAAA' height='17.71' stroke-miterlimit='3' stroke-width='0.23' stroke='#AAAAAA' transform='matrix(0 -1.00 1.00 0 286.70 1106.70)' width='24.87'></path>
+            <path d='M0,0 L210.00,0 L210.00,70.00 L0,70.00 L0,0 Z ' fill-opacity='1' fill='#A7F89C' height='70' stroke-miterlimit='3' stroke-width='5' stroke='#000000' transform='matrix(1 0 0 1 164.99 309.86)' width='209.99'></path>
+            <text fill='#000000' font-size='20' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 0.99 180.43 326.86)' type='textBox' width='179.13'>
+              <tspan x='89.56' y='27'>Interpreters</tspan>
+            </text>
+            <path d='M0,0 L210.00,0 L210.00,70.00 L0,70.00 L0,0 Z ' fill-opacity='1' fill='#A7F89C' height='70' stroke-miterlimit='3' stroke-width='5' stroke='#000000' transform='matrix(1 0 0 1 164.99 80.79)' width='209.99'></path>
+            <text fill='#000000' font-size='24' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 0.99 202.01 97.79)' type='textBox' width='135.97'>
+              <tspan x='67.98' y='28'>Importers</tspan>
+            </text>
+            <path d='M0,0 L300.00,0 L300.00,99.99 L0,99.99 L0,0 Z ' fill-opacity='0.2' fill='#9BBBFF' height='99.99' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(1 0 0 1 481.39 65.79)' width='299.99'></path>
+            <text fill='#AAAAAA' font-size='32' height='36' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(1 0 0 1 534.96 97.79)' type='textBox' width='192.87'>
+              <tspan x='96.43' y='32'>Snapshot</tspan>
+            </text>
+            <path d='M0,0 L300.00,0 L300.00,149.99 L0,149.99 L0,0 Z ' fill-opacity='0.2' fill='#9BBBFF' height='149.99' stroke-miterlimit='3' stroke-width='5' stroke='#AAAAAA' transform='matrix(1 0 0 1 481.39 269.86)' width='300.00'></path>
+            <text fill='#AAAAAA' font-size='32' height='53' stroke-miterlimit='3' stroke-width='5' stroke='none' text-align='center' text-anchor='middle' transform='matrix(1 0 0 1 490.71 318.36)' type='textBox' width='281.37'>
+              <tspan x='140.68' y='36'>Simulation</tspan>
+            </text>
+            <path d='M0,0 L238.48,0 L238.48,123.43 L0,123.43 L0,0 Z ' fill-opacity='0.48' fill='#C0B870' height='123.43' stroke-miterlimit='3' stroke-width='2.89' stroke='#888888' transform='matrix(1 0 0 1 512.15 500)' width='238.48'></path>
+            <path d='M0,0 L-17.26,35.15 ' fill='#FFFFFF' height='35.15' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 710.53 563.02)' width='17.26'></path>
+            <path d='M0,0 L17.70,35.15 ' fill='#FFFFFF' height='35.15' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 710.53 563.02)' width='17.70'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 719.32 589.08)'
+            width='17.37'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 684.57 589.08)'
+            width='17.37'></path>
+            <path d='M0,0 L-17.26,35.15 ' fill='#FFFFFF' height='35.15' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 643.93 563.02)' width='17.26'></path>
+            <path d='M0,0 L17.70,35.15 ' fill='#FFFFFF' height='35.15' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 643.93 563.02)' width='17.70'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 652.72 589.08)'
+            width='17.37'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 617.97 589.08)'
+            width='17.37'></path>
+            <path d='M0,0 L-33.92,35.18 ' fill='#D8E6EE' height='35.18' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 677.54 528.54)' width='33.92'></path>
+            <path d='M0,0 L33.66,34.68 ' fill='#D8E6EE' height='34.68' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 677.54 528.54)' width='33.66'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 701.95 554.33)'
+            width='17.37'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 668.65 519.58)'
+            width='17.37'></path>
+            <path d='M0,8.68 C0,3.88 3.88,0 8.68,0 C13.48,0 17.37,3.88 17.37,8.68 C17.37,13.48 13.48,17.37 8.68,17.37 C3.88,17.37 0,13.48 0,8.68 Z ' fill='#7ABFE6' height='17.37' stroke-miterlimit='3' stroke-width='0.89' stroke='#0049A8' transform='matrix(1 0 0 1 635.35 554.33)'
+            width='17.37'></path>
+            <path d='M0,0 L67.02,0 L67.02,34.62 L0,34.62 L0,0 Z ' fill='#FF7F50' height='34.62' stroke-miterlimit='3' stroke-width='0.38' stroke='#AAAAAA' transform='matrix(1 0 0 1 526.11 545.70)' width='67.02'></path>
+            <text fill='#000000' font-size='24' height='36' stroke-miterlimit='3' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.57 0 0 0.57 529.88 552.59)' type='textBox' width='102.70'>
+              <tspan x='51.35' y='28'>Rules</tspan>
+            </text>
+          </svg>
+          <div>
+            Now the importers and interpreters are become more important!
+          </div>
+          <div class='fragment'>
+            They act as controllers for the macro actions. Sending the orders to
+            <br> the game and reading the state back accordingly.
+          </div>
+        </section>
+        <section id='macroactions'>
+          <div style='position: relative; height: 920px;'>
+            <h3 style='position: absolute; top: 20px; right: 150px;'>Rules</h3>
+            <div class='fragment fade-out' data-fragment-index='2' style='position: absolute; top: 150px; left: 0px; width: 100%; height: 920px;'>
+              <pre style='position: absolute; top: 0px; left: 96px;'>Attack := !waiting &&#x000A;          [ creatures | can( attack ) ]&#x000A;          x [ heroes | isTargetable ]&#x000A;</pre>
+              <pre class='fragment fade-in' data-fragment-index='1' style='position: absolute; top: 200px; left: 430px; width: 1920px;'>Attack( redcap_melee1, charming )&#x000A;Attack( redcap_melee1, winter )&#x000A;Attack( redcap_melee2, charming )&#x000A;Attack( puck, malice )&#x000A;</pre>
+            </div>
+            <div style='position: absolute; top: 150px; left: 0px; width: 100%; height: 920px;'>
+              <pre class='fragment fade-in' data-fragment-index='2' style='position: absolute; top: 0px; left: 96px;'>PuckStealth :=&#x000A;      !waiting & cooldown( puck ) &&#x000A;      [ creatures | puck | can( special ) ]&#x000A;      x [ heroes | isTargetable | straggler ]&#x000A;</pre>
+              <pre class='fragment fade-in' data-fragment-index='3' style='position: absolute; top: 250px; left: 200px; width: 1920px;'>PuckStealth( puck1, shroud )&#x000A;</pre>
+              <pre class='fragment fade-in' data-fragment-index='3' style='position: absolute; top: 320px; left: 300px; width: 1920px;'>Special( puck1 )&#x000A;Move( puck1, shroud )&#x000A;WaitOpportunity( puck1, shroud )&#x000A;Attack( puck1, shroud )&#x000A;</pre>
+            </div>
+            <div class='fragment fade-out' data-fragment-index='1' style='position: absolute; top: 800px; left: 0px; width: 100%;'>
+              Rules are used to analyse the simulation state
+              <br> and create the actions for the villain to try
+            </div>
+            <div class='fragment current-visible' data-fragment-index='1' style='position: absolute; top: 800px; left: 0px; width: 100%;'>
+              Written in this functional manner, they evaluate to a set of
+              <br> tuples, which are the parameters for the associated action.
+            </div>
+            <div class='fragment current-visible' data-fragment-index='2' style='position: absolute; top: 800px; left: 0px; width: 100%;'>
+              Macro actions are no different ...
+            </div>
+            <div class='fragment current-visible' data-fragment-index='3' style='position: absolute; top: 800px; left: 0px; width: 100%;'>
+              Excpect the action is a list of atomic operations and a controller,
+              <br> which executes them appropriately within the simulation
+              <br> and game
+            </div>
+          </div>
+        </section>
+        <section id='buckets'>
+          <div style='position: relative; top: 0px; left: 0px; width: 1920px; height: 1080px;'>
+            <h3 style='position: absolute; top: 50px; right: 100px'>Action Buckets</h3>
+            <svg class='courier' style='width: 1200px; height: 816px; position: absolute; top: 30px; left: 210px;' viewbox='0 0 500 360'>
+              <g id='tree'></g>
+              <g id='textroot'>
+                <g id='background'>
+                  <path d='M0,0 L450,0 L450,140 L0,140 L0,0 Z ' display='none' fill='#6DCDF3' height='101' id='bucket1' stroke-miterlimit='3' stroke='none' transform='matrix(1 0 0 1 50 50)' width='400'></path>
+                  <path d='M0,0 L450,0 L450,170 L0,170 L0,0 Z ' display='none' fill='#6DCDF3' height='140' id='bucket2' opacity='0.64' stroke-miterlimit='3' stroke='none' transform='matrix(1 0 0 1 50 200)' width='400'></path>
+                  <text class='label' fill='#000000' font-family='Courier' font-size='22' height='25' opacity='0' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 60 60)' type='textBox' width='150'>
+                    <tspan x='0' y='22'>Openings :=</tspan>
+                  </text>
+                  <text class='label' fill='#000000' font-family='Courier' font-size='22' height='25' opacity='0' stroke-miterlimit='3' stroke='none' text-align='right' text-anchor='end' transform='matrix(1 0 0 1 60 210)' type='textBox' width='150'>
+                    <tspan x='150' y='22'>Combat :=</tspan>
+                  </text>
+                  <text class='pred' fill='#000000' font-family='Courier' font-size='22' height='25' opacity='0' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 220 60)' type='textBox' width='220'>
+                    <tspan x='0' y='22'>if root then</tspan>
+                  </text>
+                  <text class='pred' fill='#000000' font-family='Courier' font-size='22' height='25' opacity='0' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 220 210)' type='textBox' width='220'>
+                    <tspan x='0' y='22'>if prev( wait ) then</tspan>
+                  </text>
+                </g>
+                <g id='rules'>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r1' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 97.63546798029554 156.65024630541944)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>WaitUntilContact</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r2' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 49.753694581281934 40.34482758620838)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>WaitUntilAmbush</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r3' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 56.403940886700184 216.226600985224)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>PuckStealth</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r4' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 216.8965517241381 112.1674876847293)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>Artillery</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r6' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 138.42364532019704 262.6108374384248)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>AttackOrder</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r5' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 260.34482758620743 210.44334975369745)' type='textBox'
+                  width='220'>
+                    <tspan x='0' y='22'>SpecialOrder</tspan>
+                  </text>
+                  <text class='rule' display='none' fill='#000000' font-family='Courier' font-size='22' height='25' id='r7' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 310 64.2857142857149)' type='textBox' width='220'>
+                    <tspan x='0' y='22'>UseGate</tspan>
+                  </text>
+                </g>
+              </g>
+            </svg>
+            <div class='fragment fade-out' data-fragment-index='1' id='b_arrange' style='position: absolute; bottom: 150px; width: 100%;'>
+              No we can do start doing some funky things with our rules
+            </div>
+            <div class='fragment current-visible' data-fragment-index='1' style='position: absolute; bottom: 150px; width: 100%;'>
+              By grouping them into buckets we can use different sets according to game context
+            </div>
+            <div class='fragment current-visible' style='position: absolute; bottom: 150px; width: 100%;'>
+              Use coarse grained actions for "opening moves" and
+              <br> finer grained actions during combat, for example
+            </div>
+            <div class='fragment current-visible' id='b_predicates' style='position: absolute; bottom: 150px; width: 100%;'>
+              One idea would be to attached predicates to buckets
+            </div>
+            <div class='fragment' id='b_root' style='position: absolute; bottom: 120px; width: 100%;'>
+              Then use different buckets as we descend the tree
+              <br> giving us a "scriptable" search space
+            </div>
+          </div>
+          <div class='fragment' id='b_node1'></div>
+          <div class='fragment' id='b_node2'></div>
+        </section>
+        <section id='gateproblem'>
+          <div>
+            <svg style='width: 1920px; height: 1020px;' viewbox='0 0 1601 898'>
+              <!-- , style: "position: absolute; top: 350px; left: 100px;" } -->
+              <!-- :viewbox => "0 0 620 310", -->
+              <image height='898' transform='matrix(1 0 0 1 0 0)' width='1601' xlink:href='res/gates.png'></image>
+              <g class='fragment fade-out' data-fragment-index='4'>
+                <g transform='translate(20,20)'>
+                  <rect fill='white' height='58' opacity='0.8' width='864'></rect>
+                  <text fill='black' font-size='42'>
+                    <tspan x='12' y='42'>
+                      The curious incident of the poltergeist gates ...
+                    </tspan>
+                  </text>
+                </g>
+                <g class='fragment' data-fragment-index='2' transform='translate(850,450)'>
+                  <rect fill='white' height='58' opacity='0.8' width='340'></rect>
+                  <text fill='black' font-size='42'>
+                    <tspan x='12' y='42'>
+                      Last creature left
+                    </tspan>
+                  </text>
+                </g>
+                <g class='fragment' data-fragment-index='3' transform='translate(350,250)'>
+                  <rect fill='white' height='58' opacity='0.8' width='680'></rect>
+                  <text fill='black' font-size='42'>
+                    <tspan x='12' y='42'>
+                      We can only wait or toggle the gates
+                    </tspan>
+                  </text>
+                </g>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='4' transform='translate(645,420)'>
+                <rect fill='white' height='58' opacity='0.8' width='310'></rect>
+                <text fill='black' font-size='42'>
+                  <tspan x='12' y='42'>
+                    What happens?
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='5' transform='translate(380,420)'>
+                <rect fill='white' height='106' opacity='0.8' width='820'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='410' y='42'>
+                    The villain randomly opens and closes gates
+                  </tspan>
+                  <tspan x='410' y='92'>
+                    funny but doesn't look good
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='6' transform='translate(720,150)'>
+                <rect fill='white' height='106' opacity='0.8' width='820'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='410' y='42'>
+                    Distribution of position in the ranking table
+                  </tspan>
+                  <tspan x='410' y='92'>
+                    over multiple runs (from same snapshot)
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='7' transform='translate(1100,550)'>
+                <rect fill='white' height='58' opacity='0.8' width='320'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='160' y='42'>
+                    This gate is bad!
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='8' transform='translate(900,150)'>
+                <rect fill='white' height='106' opacity='0.8' width='650'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='325' y='42'>
+                    But everything is equivalent ...
+                  </tspan>
+                  <tspan x='325' y='92'>
+                    So anything will do
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment current-visible' data-fragment-index='9' transform='translate(1020,350)'>
+                <rect fill='white' height='58' opacity='0.8' width='550'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='275' y='42'>
+                    Quantise scores into "bands"
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment' data-fragment-index='9' transform='translate(20,20)'>
+                <rect fill='white' height='58' opacity='0.8' width='410'></rect>
+                <text fill='black' font-size='42'>
+                  <tspan x='12' y='42'>
+                    Priority Quantisation
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment' data-fragment-index='10' transform='translate(1050,500)'>
+                <rect fill='white' height='106' opacity='0.8' width='520'></rect>
+                <text fill='black' font-size='42' text-align='center' text-anchor='middle'>
+                  <tspan x='250' y='42'>
+                    Select the highest priority
+                  </tspan>
+                  <tspan x='250' y='92'>
+                    action from the top band
+                  </tspan>
+                </text>
+              </g>
+              <g class='fragment' data-fragment-index='6' transform='translate(50,350) scale(1.5)'>
+                <g>
+                  <rect fill='white' height='310' opacity='0.8' width='620'></rect>
+                </g>
+                <g id='highlight' name='highlight'>
+                  <path class='fragment' d='M0,0 L600,0 L600,40 L0,40 L0,0 Z ' data-fragment-index='7' fill='#21BDEE' height='40' id='highlight' opacity='0.54' stroke-miterlimit='3' stroke-width='0.99' stroke='none' transform='matrix(1 0 0 1 9.99 240)' width='600'></path>
+                  <path class='bands fragment' d='M0,0 L600,0 L600,165.0 L0,165.0 L0,0 Z ' data-fragment-index='9' fill-opacity='0.25' fill='#CA1818' height='165.0' opacity='0.54' stroke-miterlimit='3' stroke-width='0.99' stroke='none' transform='matrix(1 0 0 1 9.99 35.0)'
+                  width='600'></path>
+                  <path class='bands fragment' d='M0,0 L600,0 L600,40 L0,40 L0,0 Z ' data-fragment-index='9' fill-opacity='0.25' fill='#D5EE21' height='40' opacity='0.54' stroke-miterlimit='3' stroke-width='0.99' stroke='none' transform='matrix(1 0 0 1 9.99 200.0)' width='600'></path>
+                  <path class='fragment' d='M0,0 L600,0 L600,40 L0,40 L0,0 Z ' data-fragment-index='10' fill='#FD0202' height='40' id='selected' opacity='0.54' stroke-miterlimit='3' stroke-width='0.99' stroke='none' transform='matrix(1 0 0 1 9.99 120)' width='600'></path>
+                </g>
+                <g id='table' name='table'>
+                  <path d='M0,0 L600.0,0 ' fill='#000000' stroke-miterlimit='3' stroke='#AAAAAA' transform='matrix(1 0 0 1 9.99 80)' width='600.0'></path>
+                  <path d='M0,0 L0,245 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611664' stroke='#AAAAAA' transform='matrix(1 0 0 1 334.99 34.99)'></path>
+                  <path d='M0,0 L600.0,0 ' fill='#000000' stroke-miterlimit='3' stroke='#AAAAAA' transform='matrix(1 0 0 1 9.99 160.0)' width='600.0'></path>
+                  <path d='M0,0 L0,245 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611664' stroke='#AAAAAA' transform='matrix(1 0 0 1 384.99 34.99)'></path>
+                  <path d='M0,0 L0,245 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611664' stroke='#AAAAAA' transform='matrix(1 0 0 1 434.99 34.99)'></path>
+                  <path d='M0,0 L600.0,0 ' fill='#000000' stroke-miterlimit='3' stroke='#AAAAAA' transform='matrix(1 0 0 1 9.99 120)' width='600.0'></path>
+                  <path d='M0,0 L0,244.99 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611665' stroke='#AAAAAA' transform='matrix(1 0 0 1 485 34.99)'></path>
+                  <path d='M0,0 L600.0,0 ' fill='#000000' stroke-miterlimit='3' stroke='#AAAAAA' transform='matrix(1 0 0 1 9.99 239.99)' width='600.0'></path>
+                  <path d='M0,0 L0,245 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611664' stroke='#AAAAAA' transform='matrix(1 0 0 1 534.99 34.99)'></path>
+                  <path d='M0,0 L600.0,0 ' fill='#000000' stroke-miterlimit='3' stroke='#AAAAAA' transform='matrix(1 0 0 1 9.99 200)' width='600.0'></path>
+                  <path d='M0,0 L0,245 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611664' stroke='#AAAAAA' transform='matrix(1 0 0 1 584.99 34.99)'></path>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 324.99 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>1</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 374.99 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>2</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 425 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>3</tspan>
+                  </text>
+                  <path d='M0,0 L300.0,0 L300.0,245 L0,245 L0,0 Z ' fill='none' height='245.0' stroke-miterlimit='3' stroke-width='2.3478713763747794' stroke='#000000' transform='matrix(1 0 0 1 310.0 34.99)' width='300.0'></path>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 475 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>4</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 525.0 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>5</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 575.0 9.99)' type='textBox' width='20.0'>
+                    <tspan x='10.0' y='18'>6</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='22' height='25' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 44.99)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Gate 1</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(0.99 0 0 1 24.99 9.99)' type='textBox' width='80.50431034482756'>
+                    <tspan x='0' y='18'>Action</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.99 9.99)' type='textBox' width='75.0'>
+                    <tspan x='37.5000000000001' y='18'>Score</tspan>
+                  </text>
+                  <path d='M0,0 L0,244.99 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611662' stroke='#AAAAAA' transform='matrix(1 0 0 1 235 35.0)'></path>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235 9.99)' type='textBox' width='75.0'>
+                    <tspan x='37.5000000000001' y='18'>Error</tspan>
+                  </text>
+                  <path d='M0,0 L0,244.99 ' fill='#000000' height='245' stroke-miterlimit='3' stroke-width='0.9899494936611662' stroke='#AAAAAA' transform='matrix(1 0 0 1 159.99 35.0)'></path>
+                  <text fill='#000000' font-family='Arial' font-size='22' height='25' id='notwait' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 85)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Gate 4</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='22' height='25' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 125)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Wait</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='22' height='25' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 164.99)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Gate 2</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='22' height='25' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 204.99)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Gate 5</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='22' height='25' stroke-miterlimit='3' stroke='none' text-align='left' text-anchor='start' transform='matrix(1 0 0 1 24.99 245.2586206896553)' type='textBox' width='146.55172413793105'>
+                    <tspan x='0' y='22'>Gate 3</tspan>
+                  </text>
+                  <path d='M0,0 L300.0,0 L300.0,244.99 L0,244.99 L0,0 Z ' fill='none' height='245' stroke-miterlimit='3' stroke-width='2.347871376374779' stroke='#000000' transform='matrix(1 0 0 1 9.99 35.0)' width='300.0'></path>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 47.49999999999973)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.5</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 87.49999999999997)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.49</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 127.5)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.49</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 167.60775862068954)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.48</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 207.49999999999991)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.39</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 159.49137931034434 247.75862068965523)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.02</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235.0 47.49999999999973)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.03</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235.0 87.49999999999997)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.03</tspan>
+                  </text>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235.0 127.5)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.02</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 0.99 235.0 167.6077586206896)' type='textBox'
+                  width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.01</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235.0 207.49999999999991)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.04</tspan>
+                  </text>
+                  <text class='notwait' fill='#000000' font-family='Arial' font-size='18' height='20' stroke-miterlimit='3' stroke-width='2' stroke='none' text-align='center' text-anchor='middle' transform='matrix(0.99 0 0 1 235.0 247.75862068965523)' type='textBox' width='75.0'>
+                    <tspan x='37.50000000000008' y='18'>0.01</tspan>
+                  </text>
+                </g>
+                <g id='boxwhisker' name='boxwhisker'>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 335.0 42.5)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 535.0 42.5)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 335.02156500308143 85.0)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 535.0 85.0)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 335 125)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 485 125)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 385 165.0)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 535.0 165.0)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 585 245.0)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 385 205)'></path>
+                  <path d='M0,0 L0,30 ' fill='#FFFFFF' height='30' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 535.0 205)'></path>
+                  <text fill='#000000' font-family='Arial' font-size='18' height='20' id='runs' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='none' text-align='right' text-anchor='end' transform='matrix(1 0 0 1 510.0 285)' type='textBox' width='100'>
+                    <tspan x='100' y='18'>Runs: 20</tspan>
+                  </text>
+                  <path d='M0,0 L200.0,0 ' fill='#FFFFFF' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 335.0 57.5)' width='200.0'></path>
+                  <path d='M0,0 L200.0,0 ' fill='#FFFFFF' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 335.0 100)' width='200.0'></path>
+                  <path d='M0,0 L147.78325123152683,0.4926108374386331 ' fill='#FFFFFF' height='0.4926108374386331' stroke-miterlimit='3' stroke-width='5.4034322695830195' stroke='#000000' transform='matrix(1 0 0 1 336.4802856445313 140)' width='147.78325123152706'></path>
+                  <path d='M0,0 L150.0,0.49261083743843415 ' fill='#FFFFFF' height='0.49261083743843415' stroke-miterlimit='3' stroke-width='5.47722557505166' stroke='#000000' transform='matrix(1 0 0 1 385.0 180)' width='150.0'></path>
+                  <path d='M0,0 L150.0,0 ' fill='#FFFFFF' stroke-miterlimit='3' stroke-width='5.4034322695830195' stroke='#000000' transform='matrix(1 0 0 1 385.0 220)' width='150.0'></path>
+                  <path d='M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ' fill='#22D345' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 385.0 90.0)' width='49.99'></path>
+                  <path d='M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ' fill='#FF7418' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 435.0 90.0)' width='49.99'></path>
+                  <path d='M0,0 L99.99,0 L99.99,20 L0,20 L0,0 Z ' fill='#22D345' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 335.0 47.50000000000002)' width='100'></path>
+                  <path d='M0,0 L50,0 L50,20 L0,20 L0,0 Z ' fill='#FF7418' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 435.0 47.50000000000002)' width='50.0'></path>
+                  <path d='M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ' fill='#22D345' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 385.0 130)' width='49.99'></path>
+                  <path d='M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ' fill='#FF7418' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 434.99 130)' width='49.99'></path>
+                  <path d='M0,0 L49.99,0 L49.99,20 L0,20 L0,0 Z ' fill='#FF7418' height='20' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 434.75369458128216 171.28078817733947)' width='49.99'></path>
+                  <path d='M0,0 L99.99,0 L99.99,20.0 L0,20.0 L0,0 Z ' fill='#22D345' height='20.0' stroke-miterlimit='3' stroke-width='2' stroke='#000000' transform='matrix(1 0 0 1 435.0 210)' width='100'></path>
+                </g>
+                <!-- %g -->
+                <!-- %text{ :fill => "white", :transform => "matrix(1 0 0 1 325 10)", :type => "textBox", :width => "20.0"} -->
+                <!-- %tspan{:x => "10.0", :y => "18"} ksjdfkjsd -->
+              </g>
+            </svg>
+          </div>
+        </section>
+        <section id='qa'>
+          <h1>Conclusion</h1>
+          <br>
+          <ul>
+            <li>MCTS is a versatile general purposes problem solving algorithm</li>
+            <li>There are differences and challenges using it in a real-time game</li>
+            <li>But also techniques to make it work for you</li>
+            <li>
+              Thinking about the problem as a modelling problem is an
+              <br> interesting and different to traditional approaches
+            </li>
+          </ul>
+          <br>
+          <br>
+          <a href='http://mcts.ai'>http://mcts.ai</a>
+          <br>
+          <a href='http://nucl.ai'>http://nucl.ai</a>
+          <br>
+          <a href='http://lionhead.com'>http://lionhead.com</a>
+          <br>
+          <br> GL &amp; HF
+          <br>
+          <br> Gwaredd
+        </section>
+      </div>
+    </div>
+    <script src='index.js' type='text/javascript'></script>
+    <script src='slides/00_slide.js' type='text/javascript'></script>
+    <script src='slides/04_mcts.js' type='text/javascript'></script>
+    <script src='slides/06_mcts_challenges.js' type='text/javascript'></script>
+    <script src='slides/08_legends_model.js' type='text/javascript'></script>
+    <script src='slides/10_implementation.js' type='text/javascript'></script>
+    <script src='slides/12_searchspace.js' type='text/javascript'></script>
+    <script src='slides/16_buckets.js' type='text/javascript'></script>
+  </body>
+
+</html>

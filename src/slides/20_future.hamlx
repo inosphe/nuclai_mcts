@@ -1,0 +1,10 @@
+%section#future
+
+  %h3 Future Plans
+  %ul
+    %li Using telemetry data
+    %li Dynamic difficultly
+    %li Modelling actual player behaviour
+    %li MCTS with heuristics (and other variants)
+    %li Strategy (Hierarchical MCTS)
+

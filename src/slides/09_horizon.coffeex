@@ -1,0 +1,122 @@
+#-------------------------------------------------------------------------------
+
+new Slide
+
+  id: "horizon"
+
+  data: {
+    children:[
+      { children:[] }
+      { children:[] }
+      {
+        children:[
+          { children:[] }
+          { children:[] }
+          {
+            children:[
+              { children:[] }
+              { children:[] }
+              { children:[] }
+              { children:[] }
+              { children:[] }
+            ] }
+          { children:[] }
+          { children:[] }
+        ] }
+      { children:[] }
+      { children:[] }
+    ]
+  }
+
+  doSetup: ->
+
+    slide   = this
+
+    angle   = 120
+    ratio   = angle / 360
+    turn    = -30
+
+    svg   = $ '#horizontree'
+    @root = d3.select svg[0]
+
+    @tree = new Tree
+      g         : @root.select 'g'
+      width     : svg.width()
+      height    : svg.height()
+      highlight : [1] #,4,7,10]
+      depth     : 200
+
+      colour    : (d) ->
+          if d.id in slide.tree.highlight then "coral" else "lightsteelblue"
+      stroke    : (d) ->
+          if d.id in slide.tree.highlight then "red" else "steelblue"
+
+      position  : (g) -> g.attr 'transform', "translate( #{ svg.width() / 2 - 400 }, #{ svg.height() / 2 })"
+
+      diagonal  : d3.svg.diagonal.radial().projection (d) -> [ d.y, ( ratio * d.x - turn ) / 180 * Math.PI ]
+      tree      : d3.layout.tree()
+                    .size       [ 360, svg.height() / 2  - 50 ]
+                    .separation (a, b) -> (if a.parent == b.parent then 1 else 2) / if a.depth > 0 then a.depth else 1
+      translate : (d) -> "rotate( #{ ratio * d.x - 90 - turn } ) translate( #{ d.y } )"
+
+    @tree.draw @data
+
+
+  onShow: (e) ->
+
+    @doSetup()
+
+
+  index: 0
+  stage: 1
+  onStep: ->
+
+    @index++
+
+    return if @index >= 5 and @stage is 1
+    return if @index >= 10 and @stage is 2
+
+    svg   = $ '#horizonsvg'
+    root  = d3.select svg[0]
+
+    root.select '#marker'
+      .attr 'transform', "matrix(1 0 0 1 #{ 50 * @index } 10)"
+
+    switch @index
+      when 1
+        @tree.highlight = [1,4]
+        root.select( '#action1' ).style 'display', 'block'
+      when 2
+        @tree.highlight = [1,4,7]
+        root.select( '#action2' ).style 'display', 'block'
+      when 4
+        @tree.highlight = [1,4,7,10]
+        root.select( '#action3' ).style 'display', 'block'
+
+    @tree.draw @data
+
+    slide = this
+    setTimeout ( -> slide.onStep() ), 500
+
+
+  onFragementShow: (e) ->
+
+    slide = this
+
+    switch e.fragment.id
+
+      when "h_expand"
+        setTimeout ( -> slide.onStep() ), 500
+
+      when "h_default"
+
+        @stage = 2
+
+        svg   = $ '#horizonsvg'
+        root  = d3.select svg[0]
+
+        root.selectAll '.default'
+          .style 'display', 'block'
+
+        setTimeout ( -> slide.onStep() ), 500
+

@@ -1,0 +1,11 @@
+{
+  "name": "reveal.js",
+  "version": "3.1.0",
+  "main": [
+    "js/reveal.js",
+    "css/reveal.css",
+    "css/theme/beige.css",
+    "plugin/math/math.js",
+    "lib/js/head.min.js"
+  ]
+}

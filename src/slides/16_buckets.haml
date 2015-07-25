@@ -1,0 +1,67 @@
+%section#buckets
+
+  %div{ style:"position: relative; top: 0px; left: 0px; width: 1920px; height: 1080px;" }
+
+    %h3{ style: "position: absolute; top: 50px; right: 100px" } Action Buckets
+
+    %svg.courier{ :viewbox => "0 0 500 360", style: "width: 1200px; height: 816px; position: absolute; top: 30px; left: 210px;"}
+
+      %g#tree
+
+      %g#textroot
+
+        %g#background
+
+          %path#bucket1{ display:"none", :d => "M0,0 L450,0 L450,140 L0,140 L0,0 Z ", :fill => "#6DCDF3", :height => "101", :stroke => "none", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 50 50)", :width => "400"}
+
+          %path#bucket2{ display:"none", :d => "M0,0 L450,0 L450,170 L0,170 L0,0 Z ", :fill => "#6DCDF3", :height => "140", :opacity => "0.64", :stroke => "none", "stroke-miterlimit" => "3", :transform => "matrix(1 0 0 1 50 200)", :width => "400"}
+
+          %text.label{ :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 60 60)", :type => "textBox", :width => "150", opacity: "0"}
+            %tspan{:x => "0", :y => "22"} Openings :=
+          %text.label{ :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "right", "text-anchor" => "end", :transform => "matrix(1 0 0 1 60 210)", :type => "textBox", :width => "150", opacity: "0"}
+            %tspan{:x => "150", :y => "22"} Combat :=
+
+          %text.pred{ opacity:"0", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 220 60)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} if root then
+
+          %text.pred{ opacity:"0", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 220 210)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} if prev( wait ) then
+
+        %g#rules
+          %text#r1.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 97.63546798029554 156.65024630541944)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} WaitUntilContact
+          %text#r2.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 49.753694581281934 40.34482758620838)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22" } WaitUntilAmbush
+          %text#r3.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 56.403940886700184 216.226600985224)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} PuckStealth
+          %text#r4.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 216.8965517241381 112.1674876847293)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} Artillery
+          %text#r6.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 138.42364532019704 262.6108374384248)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} AttackOrder
+          %text#r5.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 260.34482758620743 210.44334975369745)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} SpecialOrder
+          %text#r7.rule{ display:"none", :fill => "#000000", "font-family" => "Courier", "font-size" => "22", :height => "25", :stroke => "none", "stroke-miterlimit" => "3", "text-align" => "left", "text-anchor" => "start", :transform => "matrix(1 0 0 1 310 64.2857142857149)", :type => "textBox", :width => "220"}
+            %tspan{:x => "0", :y => "22"} UseGate
+
+    %div.fragment.fade-out#b_arrange{ style: "position: absolute; bottom: 150px; width: 100%;", "data-fragment-index" => 1 }
+      No we can do start doing some funky things with our rules
+
+    %div.fragment.current-visible{ style: "position: absolute; bottom: 150px; width: 100%;", "data-fragment-index" => 1 }
+      By grouping them into buckets we can use different sets according to game context
+
+    %div.fragment.current-visible{ style: "position: absolute; bottom: 150px; width: 100%;" }
+      Use coarse grained actions for "opening moves" and
+      %br/
+      finer grained actions during combat, for example
+
+    %div.fragment.current-visible#b_predicates{ style: "position: absolute; bottom: 150px; width: 100%;" }
+      One idea would be to attached predicates to buckets
+
+    %div.fragment#b_root{ style: "position: absolute; bottom: 120px; width: 100%;" }
+      Then use different buckets as we descend the tree
+      %br/
+      giving us a "scriptable" search space
+
+  #span.fragment#b_node1
+  #span.fragment#b_node2
+

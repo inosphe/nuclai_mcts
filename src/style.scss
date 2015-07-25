@@ -1,0 +1,166 @@
+
+
+// .reveal .slides > section, .reveal .slides > section > section {
+//   padding: 0px 0px;
+// }
+
+.reveal pre {
+  font-size: 42px;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+// .reveal section img
+// {
+//   border: 0px solid black;
+//   max-width: 100%;
+// }
+
+
+
+.courier
+{
+    text
+    {
+        font-family: "Courier";
+    }
+}
+
+.reveal .content
+{
+    margin-right: 10%;
+    margin-left: 10%;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+.xox
+{
+    td
+    {
+      width: 35px;
+    }
+
+    td:not(:first-child)
+    {
+        border-bottom   : 1px solid;
+        border-left     : 1px solid;
+    }
+}
+
+.xox_left
+{
+    text-anchor: end;
+    font-size: 48px;
+}
+
+.xox_right
+{
+    text-anchor: start;
+    font-size: 48px;
+}
+
+.xox_frag
+{
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    bottom: 10px;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+.link
+{
+  fill: none;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+.area
+{
+    fill: #A0D468;
+    stroke: blue;
+    stroke-width: 2;
+    stroke-opacity: 1;
+    // fill-opacity: 0.2;
+    // &:hover
+    // {
+    //     fill-opacity: 0.5;
+    // }
+}
+
+
+
+.actor
+{
+    fill: blue;
+    stroke: black;
+
+    &:hover
+    {
+        fill: yellow;
+    }
+
+    text
+    {
+        font-size: 50px;
+        fill: black;
+        stroke: none;
+    }
+}
+
+.hero
+{
+    fill: #5D9CEC;
+    stroke: #4A89DC;
+    stroke-width: 20;
+    opacity: 1.0;
+    &:hover
+    {
+        fill: #3BAFDA;
+        stroke: #3BAFDA;
+    }
+}
+
+.creature
+{
+    fill: #ED5565;
+    stroke: #DA4453;
+    stroke-width: 20;
+    opacity: 1.0;
+    &:hover
+    {
+        fill: #FC6E51;
+        stroke: #E9573F;
+    }
+}
+
+.orders
+{
+    stroke-width: 20px;
+
+    .attack
+    {
+
+    }
+
+    .special
+    {
+       stroke-dasharray: 30, 30;
+    }
+
+    .hero
+    {
+        stroke: #2b8cbe;
+    }
+
+    .creature
+    {
+        stroke: #e34a33;
+    }
+}
+

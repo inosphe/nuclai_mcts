@@ -1,0 +1,136 @@
+%section#mcts
+
+  .content{ style: "position: relative;" }
+
+    %h3.fable{ style: "position: absolute; top: 20px; right: 0px;" }
+      MCTS
+
+    %h3.fragment.fade-out{ style: "position: absolute; top: 400px; width: 100%;", "data-fragment-index" => "1" }
+      It works something like this ...
+
+    %div.fragment.fade-out#xox_continue{ style: "position: absolute; top: 700px; left: 0px;", "data-fragment-index" => "13" }
+      %div.fragment{ "data-fragment-index" => "11" }
+        $${ Score_{child} \over Visits_{child} } + C \sqrt{\frac{\ln Visits_{parent}}{ Visits_{child} }}$$
+
+
+    %svg.fragment{ width: "1680", height: "920", style:"display:block; margin-top: 20px;", "data-fragment-index" => "1" }
+
+      %defs
+
+
+        %g#nought
+          %circle{ r:"30", "stroke-width"=>"2", fill:"none" }
+
+        %g#cross
+          %line{ x1:"-30", y1:"-30", x2:"30", y2:"30",  style:"stroke-width:2;" }
+          %line{ x1:"-30", y1:"30",  x2:"30", y2:"-30", style:"stroke-width:2;" }
+
+        %g#highlight
+          %rect{ transform: "translate( -49, -49 )", width:"98", height:"98", style:"fill:powderblue; stroke-width:0; fill-opacity: 0.7;" }
+
+        %g#highlight_o
+          %rect{ transform: "translate( -49, -49 )", width:"98", height:"98", style:"fill:#d7191c; stroke-width:0; fill-opacity: 0.5;" }
+
+        %g#highlight_x
+          %rect{ transform: "translate( -49, -49 )", width:"98", height:"98", style:"fill:#1a9641; stroke-width:0; fill-opacity: 0.5;" }
+
+        %g#score
+          %rect{ transform: "translate( -49, -49 )", width:"98", height:"98", style:"fill:coral; stroke-width:0; fill-opacity: 0.6;" }
+
+      %g#tree
+
+      %g#iter{ transform: "translate(100,120)", display:"none" }
+        %text{ "font-size" => "64" }
+          Iteration 1
+
+      %g#board{ transform: "scale( 1 )" }
+
+        %g
+          %line{ x1:"0",   y1:"100", x2:"300", y2:"100", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"0",   y1:"200", x2:"300", y2:"200", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"100", y1:"0",   x2:"100", y2:"300", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"200", y1:"0",   x2:"200", y2:"300", stroke:"black", style:"stroke-width:2;"}
+          %text{ x: "150", y: "400", "text-anchor" => "middle" }
+
+        %g
+          %g#p0{ transform: "translate( 50,50 )" }
+          %g#p1{ transform: "translate( 150,50 )" }
+          %g#p2{ transform: "translate( 250,50 )" }
+          %g#p3{ transform: "translate( 50,150 )" }
+          %g#p4{ transform: "translate( 150,150 )" }
+          %g#p5{ transform: "translate( 250,150 )" }
+          %g#p6{ transform: "translate( 50,250 )" }
+          %g#p7{ transform: "translate( 150,250 )" }
+          %g#p8{ transform: "translate( 250,250 )" }
+
+        %g#win
+          %line{ x1:"0", y1:"0", x2:"300", y2:"300", style:"stroke-width:5"}
+
+      %g#board2{ transform: "scale( 1 )", display:"none" }
+
+        %g
+          %line{ x1:"0",   y1:"100", x2:"300", y2:"100", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"0",   y1:"200", x2:"300", y2:"200", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"100", y1:"0",   x2:"100", y2:"300", stroke:"black", style:"stroke-width:2;"}
+          %line{ x1:"200", y1:"0",   x2:"200", y2:"300", stroke:"black", style:"stroke-width:2;"}
+
+        %g
+          %g{ transform: "translate( 50,50 )" }
+            %line{ x1:"-30", y1:"-30", x2:"30", y2:"30",  style:"stroke-width:2; stroke:black" }
+            %line{ x1:"-30", y1:"30",  x2:"30", y2:"-30", style:"stroke-width:2; stroke:black" }
+          %g{ transform: "translate( 150,50 )" }
+          %g{ transform: "translate( 250,50 )" }
+          %g{ transform: "translate( 50,150 )" }
+            %circle{ r:"30", "stroke-width"=>"2", fill:"none", style:"stroke-width:2; stroke:black" }
+          %g{ transform: "translate( 150,150 )" }
+            %rect{ transform: "translate( -49, -49 )", width:"98", height:"98", style:"fill:#1a9641; stroke-width:0; fill-opacity: 0.6;" }
+            %line{ x1:"-30", y1:"-30", x2:"30", y2:"30",  style:"stroke-width:2; stroke:black" }
+            %line{ x1:"-30", y1:"30",  x2:"30", y2:"-30", style:"stroke-width:2; stroke:black" }
+          %g{ transform: "translate( 250,150 )" }
+          %g{ transform: "translate( 50,250 )" }
+            %line{ x1:"-30", y1:"-30", x2:"30", y2:"30",  style:"stroke-width:2; stroke:black" }
+            %line{ x1:"-30", y1:"30",  x2:"30", y2:"-30", style:"stroke-width:2; stroke:black" }
+          %g{ transform: "translate( 150,250 )" }
+            %circle{ r:"30", "stroke-width"=>"2", fill:"none", style:"stroke-width:2; stroke:black" }
+          %g{ transform: "translate( 250,250 )" }
+          %text{ x: "150", y: "400", "text-anchor" => "middle" }
+            &#126;200
+
+    %span.fragment.current-visible.xox_frag#xox_xox{ "data-fragment-index" => 1 }
+      Take the game noughts and crosses (tic-tac-toe)
+    %span.fragment.current-visible.xox_frag#xox_pickone{ "data-fragment-index" => 2 }
+      Pick a move at random
+    %span.fragment.current-visible.xox_frag#xox_transition1{ "data-fragment-index" => 3 }
+      Play the game to the end by making random moves
+    %span.fragment.current-visible.xox_frag#xox_playtoend{ "data-fragment-index" => 4 }
+      Play the game to the end by making random moves
+    %span.fragment.current-visible.xox_frag#xox_playtoend2{ "data-fragment-index" => 5 }
+      Remember the result for this move
+    %span.fragment.current-visible.xox_frag#xox_playtoend3{ "data-fragment-index" => 6 }
+      Keep doing this until we have no untried moves left
+    %span.fragment.current-visible.xox_frag#xox_first9{ "data-fragment-index" => 7 }
+      After 9 iterations, we have tried each move once
+    %span.fragment.current-visible.xox_frag#xox_select{ "data-fragment-index" => 8 }
+      So this time we select one of the promising looking moves
+    %span.fragment.current-visible.xox_frag#xox_select2{ "data-fragment-index" => 9 }
+      Then expand the next untried move as before
+    %span.fragment.current-visible.xox_frag#xox_select3{ "data-fragment-index" => 10 }
+      The phases of the algorithm are SELECT, EXPAND, SIMULATE and PROPAGATE the score
+    %span.fragment.current-visible.xox_frag#xox_select4{ "data-fragment-index" => 11 }
+      Selection is done by the UCT formula
+    %span.fragment.current-visible.xox_frag#xox_select5{ "data-fragment-index" => 12 }
+      This balances exploiting promising moves against exploring relatively unvisited nodes
+    %span.fragment.current-visible.xox_frag#xox_continue{ "data-fragment-index" => 13 }
+      Keep doing this until you feel like stopping ...
+    %span.fragment.current-visible.xox_frag#xox_stop{ "data-fragment-index" => 14 }
+      Now we have a map of probabilities from sampling potential games for each possible move
+    %span.fragment.current-visible.xox_frag#xox_rank{ "data-fragment-index" => 15 }
+      Rank them according to average score
+    %span.fragment.current-visible.xox_frag#xox_move{ "data-fragment-index" => 16 }
+      Pick the most promising move to play
+    %span.fragment.current-visible.xox_frag#xox_tactics{ "data-fragment-index" => 17 }
+      Ostensibly, the efficacy of the algorithm depends on the number of iterations
+    %span.fragment.current-visible.xox_frag#xox_tactics2{ "data-fragment-index" => 18 }
+      At about 70 iterations it consistently spots blocking the opponents line
+    %span.fragment.current-visible.xox_frag#xox_tactics3{ "data-fragment-index" => 19 }
+      At about 200 iterations it can spot forks - it got cleverer with more time!

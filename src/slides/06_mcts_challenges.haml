@@ -1,0 +1,37 @@
+%section#mcts_challenges
+
+    %h3 In real time?
+    %span.fragment
+        But real time games are not convenient
+        %br/
+        deterministic turn based board games :/
+        %br/
+        %br/
+
+    %div{ style:"position: relative; height: 240px;" }
+
+        .fragment.current-visible{ style:"position: absolute; top: 0px; left: calc( 50% - 310px );" }
+
+            %ul
+
+                %li The space is continous
+                %li The game is nondeterministic
+                %li Actions take time and happen simultaneously
+                %li
+                    Does it make sense to play to the end?
+                    %br/
+                    Or should we have a shorter planning horizon?
+
+        .fragment{ style:"position: absolute; top: 0px; left: calc( 50% - 310px );" }
+
+            %ul
+
+                %li We also have a limited CPU budget
+                %li
+                    We need authorial control
+                    %br/
+                    (i.e. as developers we need to be able to
+                    %br/
+                    control what it does)
+
+

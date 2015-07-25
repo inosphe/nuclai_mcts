@@ -1,0 +1,77 @@
+%section#legends_model
+
+  %div{ style:"position: relative; height: 1080px;", width: "100%", height: "940" }
+
+    %h3{ style: "position: absolute; top: 80px; right: 150px;" } Modelling
+
+    %svg{ width: "1920", height: "1080", style:"display:block; position: absolute; top: 0px; left: 0px;" }
+
+      %defs
+        %marker{ id: 'arrowhead', refX:'9', refY:'2', markerWidth:'8', markerHeight:'4', orient:'auto'}
+          %path{ d: "M 0,0 V 4 L6,2 Z" }
+
+      %g{ transform: "translate(1100,450) rotate(0) scale(1.2)"}
+        %g#map{ transform: "scale(0.1) translate( -3890,-27744 )"}
+
+      %g#tree
+
+
+    %h3.fragment.fade-out#lm_start{ style: "position: absolute; top: 40%; width: 100%;", "data-fragment-index" => "1"  } So this was our approach ...
+
+    %div.fragment.current-visible{ style: "position: absolute; bottom: 150px; right: 150px; text-align: right;", "data-fragment-index" => "1" }
+      Create a board game simulation
+      %br/
+      using a pre-processed stripped down
+      %br/
+      verson of the nav mesh
+
+    %span.fragment#lm_zoom{ "data-fragment-index" => "2" }
+
+    %div.fragment.current-visible#lm_show{ style: "position: absolute; bottom: 150px; right: 150px; text-align: right;", "data-fragment-index" => "3" }
+      Populate the board with the current
+      %br/
+      positions of actors from the game
+
+    %div.fragment.current-visible#lm_step1{ style: "position: absolute; bottom: 150px; right: 150px; text-align: right;", "data-fragment-index" => "4" }
+      Each turn, actors can make one action
+      %br/
+      move, attack, use an ability, etc
+
+
+    %div.fragment.current-visible#lm_showtree{ style: "position: absolute; top: 230px; right: 150px; text-align: right;", "data-fragment-index" => "5" }
+      We step the simulation until
+      %br/
+      the villain can issue an order
+
+    %div.fragment.current-visible#lm_step2{ style: "position: absolute; top: 230px; right: 150px; text-align: right;", "data-fragment-index" => "6" }
+      And keep stepping, issuing orders
+      %br/
+      until we reach a leaf node
+
+    %div.fragment.current-visible#lm_step3{ style: "position: absolute; top: 230px; right: 150px; text-align: right;", "data-fragment-index" => "7" }
+      Then step to the end of our
+      %br/
+      planning horizon
+
+
+    %span.fragment#lm_step4{ "data-fragment-index" => "8" }
+    %span.fragment#lm_step5{ "data-fragment-index" => "9" }
+
+    %div.fragment.current-visible#lm_step6{ style: "position: absolute; top: 230px; right: 150px; text-align: right;", "data-fragment-index" => "10" }
+      Now we score this potential game
+      %br/
+      by looking at the difference
+      %br/
+      between start and end health
+
+    %div.fragment#lm_score{ style: "position: absolute; top: 250px; right: 150px; text-align: right;",  "data-fragment-index" => "11" }
+      $$RSI = 1 - { 1 \over 1 + RS }$$
+      %br/
+      %br/
+      $$RS = { gains \over losses }$$
+      %br/
+      %br/
+      Using the RSI formula to
+      %br/
+      normalize the results
+
