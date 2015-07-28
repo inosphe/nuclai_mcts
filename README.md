@@ -1,5 +1,5 @@
 # nuclai_mcts
-This is an annotated version of my talk on MCTS from the 2015 nucl.ai conference, which can be found [here](http://gwaredd.github.io/nuclai_mcts/)
+This is an annotated version of my talk on MCTS from the 2015 [nucl.ai](http://nucl.ai/) conference, which can be found [here](http://gwaredd.github.io/nuclai_mcts/)
 
 ## Building
 To build
