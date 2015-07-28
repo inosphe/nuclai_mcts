@@ -4,7 +4,7 @@ This is an annotated version of my talk on MCTS from the 2015 nucl.ai conference
 ## Building
 To build
 
-* Install node.js
+* Install [node.js](https://nodejs.org/)
 * From the command line, go into the build folder
 * npm install
 * gulp
